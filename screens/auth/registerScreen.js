@@ -3,6 +3,7 @@ import { SafeAreaView, View, BackHandler, StatusBar, ScrollView, Text, Touchable
 import { withNavigation } from "react-navigation";
 import { Colors, Fonts, Sizes } from "../../constants/styles";
 import { MaterialIcons } from '@expo/vector-icons';
+import axios from 'axios';
 
 class RegisterScreen extends Component {
 
@@ -20,9 +21,41 @@ class RegisterScreen extends Component {
     };
 
     state = {
-        fullName: '',
+        full_name: '',
         password: '',
         email: '',
+        phone: '',
+    }
+
+    submit = () => {
+            console.log('clicked');
+
+        let data = JSON.stringify({
+            full_name: this.state.full_name,
+            email: this.state.email,
+            password: this.state.password,
+            phone: this.state.phone
+            });
+            this.setState({redirect: true})
+
+            console.log('value', data)
+        if ( this.state.full_name.length && this.state.password.length && this.state.email.length && this.state.phone.length) {
+            console.log('enter', data);
+            
+            axios.post('http://164.92.231.252/users/',
+                    data,
+                    {headers:{"Content-Type" : "application/json"}})
+                    .then(response => {
+                    console.log('success', response.data)
+                    if (response.data) {
+                        this.props.navigation.navigate('BottomTabBar');
+                    }
+                    })
+                    .catch(error => console.log('error', error))
+        }
+        else {
+            console.log('inputs empty')
+        }
     }
 
     render() {
@@ -38,8 +71,9 @@ class RegisterScreen extends Component {
                         {this.appLogo()}
                         {this.registerText()}
                         {this.fullNameTextField()}
-                        {this.passwordTextField()}
+                        {this.phoneTextField()}
                         {this.emailAddressTextField()}
+                        {this.passwordTextField()}
                         {this.continueButton()}
                     </ScrollView>
                 </View>
@@ -51,10 +85,10 @@ class RegisterScreen extends Component {
         return (
             <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => this.props.navigation.push('Verification')}
+                onPress={() => this.submit()}
                 style={styles.continueButtonStyle}>
                 <Text style={{ ...Fonts.whiteColor16Medium }}>
-                    Continue
+                    Creer votre compte
                 </Text>
             </TouchableOpacity>
         )
@@ -66,9 +100,22 @@ class RegisterScreen extends Component {
     fullNameTextField() {
         return (
             <TextInput
-                value={this.state.fullName}
-                onChangeText={(text) => this.setState({ fullName: text })}
+                value={this.state.full_name}
+                onChangeText={(text) => this.setState({ full_name: text })}
                 placeholder="Nom complet *"
+                selectionColor={Colors.primaryColor}
+                placeholderTextColor={Colors.grayColor}
+                style={styles.textFieldStyle}
+            />
+        )
+    }
+
+    phoneTextField() {
+        return (
+            <TextInput
+                value={this.state.phone}
+                onChangeText={(text) => this.setState({ phone: text })}
+                placeholder="Numero de telephone *"
                 selectionColor={Colors.primaryColor}
                 placeholderTextColor={Colors.grayColor}
                 style={styles.textFieldStyle}
@@ -95,7 +142,7 @@ class RegisterScreen extends Component {
             <TextInput
                 value={this.state.email}
                 onChangeText={(text) => this.setState({ email: text })}
-                placeholder="Adresse mail"
+                placeholder="Adresse mail *"
                 selectionColor={Colors.primaryColor}
                 placeholderTextColor={Colors.grayColor}
                 style={styles.textFieldStyle}

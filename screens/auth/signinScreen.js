@@ -6,12 +6,16 @@ import IntlPhoneInput from 'react-native-intl-phone-input';
 import { NavigationEvents } from 'react-navigation';
 import axios from 'axios'
 const { height } = Dimensions.get('screen');
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 class SigninScreen extends Component {
 
     constructor(props) {
         super(props);
         this.springValue = new Animated.Value(100);
+    }
+
+    state = {
+        redirect: false,
     }
 
     componentDidMount() {
@@ -39,11 +43,15 @@ class SigninScreen extends Component {
           console.log('value', data)
         if (this.state.username.length && this.state.password.length) {
             axios.post('http://164.92.231.252/login/',
-                  data,{headers:{"Content-Type" : "application/json"}})
+                  data,
+                  {headers:{"Content-Type" : "application/json"}})
                  .then(response => {
                     console.log('success', response.data)
                     this.storeData(`token ${response.data.token}`);
-                    this.getstoreData();
+                    if (response.data.token) {
+                        this.setState({ redirect: true})
+                        this.props.navigation.navigate('BottomTabBar');
+                    }
                  })
                  .catch(error => console.log('error', error))
         }
@@ -53,8 +61,9 @@ class SigninScreen extends Component {
     }
 
     storeData = async (value) => {
+        console.log('token', value);
         try {
-          await AsyncStorage.setItem('token', value)
+            await AsyncStorage.setItem('token', value)
         } catch (e) {
           // saving error
           console.log('error stored data', e)
@@ -63,8 +72,8 @@ class SigninScreen extends Component {
     
     getstoreData = async () => {
         try {
-            const t = await AsyncStorage.get('token')
-            console.log('token here', t);
+            const value = await AsyncStorage.getItem('token')
+            console.log('token here', value);
         } catch (e) {
             console.log('error get data',e)
         }
@@ -126,9 +135,6 @@ class SigninScreen extends Component {
                         Appuyez à nouveau sur Retour pour quitter.
                     </Text>
                 </Animated.View>
-                <Text>
-                    {this.state.redirect ? this.props.navigation.push('Signin'): ""}
-                </Text>
                 
             </SafeAreaView>
         )
@@ -169,7 +175,6 @@ class SigninScreen extends Component {
                 dialCodeTextStyle={{ ...Fonts.blackColor16Medium }}
                 phoneInputStyle={{ flex: 1, marginLeft: Sizes.fixPadding + 5.0, ...Fonts.blackColor16Medium }}
                 placeholder="Numero de telephone"
-                dialCodeTextStyle={{ ...Fonts.blackColor16Medium }}
             />
         )
     }
