@@ -85,22 +85,22 @@ class BottomTabBarScreen extends Component {
                     {this.bottomTabBarItem({
                         index: 1,
                         iconName: 'explore',
-                        tag: 'Discover'
+                        tag: 'Accueil'
                     })}
                     {this.bottomTabBarItem({
                         index: 2,
                         iconName: 'location-on',
-                        tag: 'Near By',
+                        tag: 'Restaurant',
                     })}
                     {this.bottomTabBarItem({
                         index: 3,
                         iconName: 'shopping-basket',
-                        tag: 'Order'
+                        tag: 'Commande'
                     })}
                     {this.bottomTabBarItem({
                         index: 4,
                         iconName: 'bookmark',
-                        tag: 'Favourite'
+                        tag: 'Favories'
                     })}
                     {this.bottomTabBarItem({
                         index: 5,

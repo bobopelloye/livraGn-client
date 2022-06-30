@@ -5,14 +5,51 @@ import { Colors, Fonts, Sizes } from "../../constants/styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Dialog from "react-native-dialog";
-
+import axios from 'axios';
 const { width } = Dimensions.get('screen');
+import { AsyncStorage } from 'react-native';
 
 class ProfileScreen extends Component {
 
+    componentDidMount() {
+        // this.getstoreData();
+        this.getUser();
+
+    }
     state = {
         logoutDialog: false,
+        currentUser: {},
+        token: ''
     }
+
+    // getstoreData = async () => {
+    //     try {
+    //         const t = await AsyncStorage.getItem('token')
+    //         console.log('token here', t);
+    //         this.setState({token: `token ${t}`})
+    //     } catch (e) {
+    //         console.log('error get data', e)
+    //     }
+    // }
+
+    getUser = async () => {
+        const t = await AsyncStorage.getItem('token')
+        axios.get('https://livragn.com/profile', {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": t
+            },      
+        })      
+        .then((response) => {
+          console.log('users',response.data)
+          this.setState({ currentUser: response.data})
+        })
+        .catch((error) => {
+          console.log('error',error.response)
+        })
+    }
+    
+    
 
     render() {
         return (
@@ -41,7 +78,7 @@ class ProfileScreen extends Component {
     paymentAddressAndVoucherSetting() {
         return (
             <View style={styles.paymentAddressAndVoucherSettingWrapStyle}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     activeOpacity={0.9}
                     onPress={() => this.props.navigation.push('PaymentMethods')}
                 >
@@ -49,20 +86,20 @@ class ProfileScreen extends Component {
                         icon: <MaterialIcons name="credit-card" size={24} color={Colors.grayColor} />,
                         setting: 'Payment Methods'
                     })}
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity
                     activeOpacity={0.9}
                     onPress={() => this.props.navigation.push('Address')}
                 >
                     {this.settings({
                         icon: <MaterialIcons name="location-on" size={24} color={Colors.grayColor} />,
-                        setting: 'Address'
+                        setting: 'Addresse'
                     })}
                 </TouchableOpacity>
-                {this.settings({
+                {/* {this.settings({
                     icon: <MaterialIcons name="local-attraction" size={24} color={Colors.grayColor} />,
                     setting: 'My Vouchers'
-                })}
+                })} */}
             </View>
         )
     }
@@ -75,7 +112,7 @@ class ProfileScreen extends Component {
             >
                 <View style={{ backgroundColor: 'white', alignItems: 'center', }}>
                     <Text style={{ ...Fonts.blackColor18Medium, paddingBottom: Sizes.fixPadding - 5.0, }}>
-                        You sure want to logout?
+                        Voulez-vous vraiment vous déconnecter ?
                     </Text>
                     <View style={styles.cancelAndLogoutButtonWrapStyle}>
                         <TouchableOpacity
@@ -83,7 +120,7 @@ class ProfileScreen extends Component {
                             onPress={() => this.setState({ logoutDialog: false })}
                             style={styles.cancelButtonStyle}
                         >
-                            <Text style={{ ...Fonts.blackColor16Medium }}>Cancel</Text>
+                            <Text style={{ ...Fonts.blackColor16Medium }}>Annuler</Text>
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={0.9}
                             onPress={() => {
@@ -92,7 +129,7 @@ class ProfileScreen extends Component {
                             }}
                             style={styles.logOutButtonStyle}
                         >
-                            <Text style={{ ...Fonts.whiteColor16Medium }}>Log out</Text>
+                            <Text style={{ ...Fonts.whiteColor16Medium }}>se déconnecter </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -113,7 +150,7 @@ class ProfileScreen extends Component {
                         marginLeft: Sizes.fixPadding,
                         width: width / 1.8,
                     }}>
-                        Logout
+                        Se deconnecter
                     </Text>
                 </View>
                 <MaterialIcons name="arrow-forward-ios" size={15} color={Colors.grayColor} />
@@ -137,18 +174,18 @@ class ProfileScreen extends Component {
                     icon: <MaterialIcons name="language" size={24} color={Colors.grayColor} />,
                     setting: 'Language'
                 })}
-                {this.settings({
+                {/* {this.settings({
                     icon: <MaterialIcons name="settings" size={24} color={Colors.grayColor} />,
                     setting: 'Settings'
                 })}
                 {this.settings({
                     icon: <MaterialIcons name="group-add" size={26} color={Colors.grayColor} />,
                     setting: 'Invite Friends'
-                })}
-                {this.settings({
+                })} */}
+                {/* {this.settings({
                     icon: <MaterialIcons name="headset-mic" size={22} color={Colors.grayColor} />,
                     setting: 'Support'
-                })}
+                })} */}
             </View>
         )
     }
@@ -179,7 +216,7 @@ class ProfileScreen extends Component {
                 style={styles.userInfoWrapStyle}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
-                        source={require('../../assets/images/user_profile/user_3.jpg')}
+                        source={require('../../assets/images/login-icon.png')}
                         style={{
                             width: 70.0, height: 70.0,
                             borderRadius: Sizes.fixPadding - 5.0,
@@ -191,10 +228,10 @@ class ProfileScreen extends Component {
                             ...Fonts.blackColor17Medium,
                             width: width / 2.3,
                         }}>
-                            Fannie Jackson
+                            { this.state.currentUser? this.state.currentUser.full_name : ""}
                         </Text>
                         <Text style={{ ...Fonts.grayColor16Medium }}>
-                            123456789
+                            { this.state.currentUser? this.state.currentUser.email : ""}
                         </Text>
                     </View>
                 </View>

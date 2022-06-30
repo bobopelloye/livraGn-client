@@ -10,6 +10,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { TransitionPresets } from 'react-navigation-stack';
 import { Component } from "react";
 import { withNavigation } from "react-navigation";
+import axios from 'axios'
+
+import { AsyncStorage } from 'react-native';
 
 const { width } = Dimensions.get("screen");
 
@@ -37,34 +40,66 @@ class EditProfileScreen extends Component {
 
 const EditProfile = ({ navigation }) => {
 
+     React.useEffect(() => {
+        getUser();
+    }, [currentUser]);
+
+    const [currentUser, setCurrentUser] = useState({});
     const [fullNameDialog, setFullnameDialog] = useState(false);
-    const [fullName, setFullName] = useState('Fannie Jackson');
+    const [fullName, setFullName] = useState(currentUser?currentUser.fullName: "");
     const [changeText, setChangeText] = useState(fullName);
 
     const [passwordDialog, setPasswordDialog] = useState(false);
-    const [password, setPassword] = useState('123456');
+    const [password, setPassword] = useState(currentUser.password);
     const [changePassword, setChangePassword] = useState(password);
 
     const [phoneDialog, setPhoneDialog] = useState(false);
-    const [phone, setPhone] = useState('123456789');
+    const [phone, setPhone] = useState(currentUser.phone);
     const [changePhone, setChangePhone] = useState(phone);
 
     const [emialDialog, setEmailDialog] = useState(false);
-    const [email, setEmail] = useState('test@abc.com');
+    const [email, setEmail] = useState(currentUser?currentUser.email: "");
     const [changeEmail, setChangeEmail] = useState(email);
 
     const [isBottomSheet, setIsBottomSheet] = useState(false);
+
+   
+
+    const getUser = async () => {
+        const t = await AsyncStorage.getItem('token')
+        axios.get('https://livragn.com/profile', {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": t
+            },      
+        })      
+        .then((response) => {
+          console.log('current user',response.data)
+          setCurrentUser(response.data)
+        })
+        .catch((error) => {
+          console.log('error',error.response)
+        })
+    }
+
+    const SaveProfile = () => {
+        console.log('full name', fullName);
+        console.log('email', email)
+        console.log('phone', phone)
+
+        navigation.pop()
+    }
 
     function backArrowAndSave() {
         return (
             <View style={styles.backArrowAndSaveContainerStyle}>
                 <Ionicons name="arrow-back-outline" size={24} color="black"
-                    onPress={() => navigation.pop()}
+                    onPress={SaveProfile}
                 />
 
-                <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.pop()}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => SaveProfile()}>
                     <Text style={{ ...Fonts.blueColor17Medium }}>
-                        Save
+                        Enregistrer
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -75,7 +110,7 @@ const EditProfile = ({ navigation }) => {
         return (
             <View style={styles.profilePhotoWrapStyle}>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <Image source={require('../../assets/images/user_profile/user_3.jpg')}
+                    <Image source={require('../../assets/images/login-icon.png')}
                         style={styles.profilePhotoStyle}
                         resizeMode="cover"
                     />
@@ -115,7 +150,7 @@ const EditProfile = ({ navigation }) => {
                     backgroundColor: 'white', alignItems: 'center',
                 }}>
                     <Text style={{ ...Fonts.blackColor18Medium, paddingBottom: Sizes.fixPadding * 3.0, }}>
-                        Change FullName
+                        Changer le nom complet
                     </Text>
                     <View style={{ borderBottomColor: 'gray', borderBottomWidth: 1.0, width: '100%' }}>
                         <TextInput
@@ -131,7 +166,7 @@ const EditProfile = ({ navigation }) => {
                         <TouchableOpacity activeOpacity={0.9} onPress={() => setFullnameDialog(false)}
                             style={styles.cancelButtonStyle}
                         >
-                            <Text style={{ ...Fonts.blackColor16Medium }}>Cancel</Text>
+                            <Text style={{ ...Fonts.blackColor16Medium }}>annuler</Text>
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={0.9} onPress={() => {
                             setFullnameDialog(false)
@@ -140,7 +175,7 @@ const EditProfile = ({ navigation }) => {
                         }
                             style={styles.okButtonStyle}
                         >
-                            <Text style={{ ...Fonts.whiteColor16Medium }}>Okay</Text>
+                            <Text style={{ ...Fonts.whiteColor16Medium }}>ok</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -157,14 +192,14 @@ const EditProfile = ({ navigation }) => {
                     backgroundColor: 'white', alignItems: 'center',
                 }}>
                     <Text style={{ ...Fonts.blackColor18Medium, paddingBottom: Sizes.fixPadding * 3.0, }}>
-                        Change Your Password
+                        Changer le mot de passe
                     </Text>
                     <View style={{
                         borderBottomColor: 'gray', borderBottomWidth: 0.50, width: '100%',
                     }}>
                         <TextInput
                             style={{ ...Fonts.blackColor16Medium, paddingBottom: Sizes.fixPadding }}
-                            placeholder='Old Password'
+                            placeholder='Ancien mot de passe'
                             secureTextEntry={true}
                         />
                     </View>
@@ -172,7 +207,7 @@ const EditProfile = ({ navigation }) => {
                         <TextInput
                             onChangeText={(value) => setChangePassword(value)}
                             style={{ ...Fonts.blackColor16Medium, paddingBottom: Sizes.fixPadding }}
-                            placeholder='New Password'
+                            placeholder='Nouveau mot de passe'
                             secureTextEntry={true}
                         />
                     </View>
@@ -182,7 +217,7 @@ const EditProfile = ({ navigation }) => {
                     }}>
                         <TextInput
                             style={{ ...Fonts.blackColor16Medium, paddingBottom: Sizes.fixPadding }}
-                            placeholder='Confirm New Password'
+                            placeholder='Confirme nouveau mot de passe'
                             secureTextEntry={true}
                         />
                     </View>
@@ -216,7 +251,7 @@ const EditProfile = ({ navigation }) => {
                 <View style={{
                     backgroundColor: 'white', alignItems: 'center',
                 }}>
-                    <Text style={{ ...Fonts.blackColor18Medium, paddingBottom: Sizes.fixPadding * 3.0, }}>Change Phone Number</Text>
+                    <Text style={{ ...Fonts.blackColor18Medium, paddingBottom: Sizes.fixPadding * 3.0, }}>Changer le numero de telephone</Text>
                     <View style={{ borderBottomColor: 'gray', borderBottomWidth: 1.0, width: '100%' }}>
                         <TextInput
                             value={changePhone}
@@ -229,7 +264,7 @@ const EditProfile = ({ navigation }) => {
                         <TouchableOpacity activeOpacity={0.9} onPress={() => setPhoneDialog(false)}
                             style={styles.cancelButtonStyle}
                         >
-                            <Text style={{ ...Fonts.blackColor16Medium }}>Cancel</Text>
+                            <Text style={{ ...Fonts.blackColor16Medium }}>Annuler</Text>
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={0.9} onPress={() => {
                             setPhoneDialog(false)
@@ -238,7 +273,7 @@ const EditProfile = ({ navigation }) => {
                         }
                             style={styles.okButtonStyle}
                         >
-                            <Text style={{ ...Fonts.whiteColor16Medium }}>Okay</Text>
+                            <Text style={{ ...Fonts.whiteColor16Medium }}>Ok</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -254,7 +289,7 @@ const EditProfile = ({ navigation }) => {
                 <View style={{
                     backgroundColor: 'white', alignItems: 'center',
                 }}>
-                    <Text style={{ ...Fonts.blackColor18Medium, paddingBottom: Sizes.fixPadding * 3.0, }}>Change Email</Text>
+                    <Text style={{ ...Fonts.blackColor18Medium, paddingBottom: Sizes.fixPadding * 3.0, }}>Changer Email</Text>
                     <View style={{ borderBottomColor: 'gray', borderBottomWidth: 1.0, width: '100%' }}>
                         <TextInput
                             value={changeEmail}
@@ -266,7 +301,7 @@ const EditProfile = ({ navigation }) => {
                         <TouchableOpacity activeOpacity={0.9} onPress={() => setEmailDialog(false)}
                             style={styles.cancelButtonStyle}
                         >
-                            <Text style={{ ...Fonts.blackColor16Medium }}>Cancel</Text>
+                            <Text style={{ ...Fonts.blackColor16Medium }}>Annuler</Text>
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={0.9} onPress={() => {
                             setEmailDialog(false)
@@ -275,7 +310,7 @@ const EditProfile = ({ navigation }) => {
                         }
                             style={styles.okButtonStyle}
                         >
-                            <Text style={{ ...Fonts.whiteColor16Medium }}>Okay</Text>
+                            <Text style={{ ...Fonts.whiteColor16Medium }}>Ok</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -296,7 +331,7 @@ const EditProfile = ({ navigation }) => {
                 >
 
                     <Text style={{ ...Fonts.blackColor19Medium, textAlign: 'center', marginBottom: Sizes.fixPadding * 2.0 }}>
-                        Choose Option
+                        changer la photo
                     </Text>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -309,7 +344,7 @@ const EditProfile = ({ navigation }) => {
                     <View style={{ flexDirection: 'row', marginTop: Sizes.fixPadding * 2.0 }}>
                         <MaterialIcons name="photo-album" size={20} color="#4C4C4C" />
                         <Text style={{ ...Fonts.blackColor16Medium, marginLeft: Sizes.fixPadding }}>
-                            Upload from Gallery
+                            Uploader la photo
                         </Text>
                     </View>
 
@@ -331,7 +366,7 @@ const EditProfile = ({ navigation }) => {
                         setChangeText(fullName);
                     }}
                 >
-                    {formData({ title: 'Full Name', value: fullName })}
+                    {formData({ title: 'Nom complet', value: fullName })}
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.9}
@@ -340,7 +375,7 @@ const EditProfile = ({ navigation }) => {
                         setChangePassword(password);
                     }}
                 >
-                    {formData({ title: 'Password', value: '******' })}
+                    {formData({ title: 'Mot de passe', value: '******' })}
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.9}
@@ -349,7 +384,7 @@ const EditProfile = ({ navigation }) => {
                         setPhoneDialog(true);
                     }}
                 >
-                    {formData({ title: 'Phone', value: phone })}
+                    {formData({ title: 'Telephone', value: phone })}
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.9}

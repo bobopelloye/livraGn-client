@@ -42,7 +42,7 @@ class SigninScreen extends Component {
 
           console.log('value', data)
         if (this.state.username.length && this.state.password.length) {
-            axios.post('http://164.92.231.252/login/',
+            axios.post('https://livragn.com/login/',
                   data,
                   {headers:{"Content-Type" : "application/json"}})
                  .then(response => {

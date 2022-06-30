@@ -1,14 +1,14 @@
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage'
-const BASE_URL_API = "http://164.92.231.252";
+import {AsyncStorage} from 'react-native'
+const BASE_URL_API = "https://livragn.com";
 
-let token  = AsyncStorage.getItem('token')? `token ${AsyncStorage.getItem('token')}`: null;
+let token  = AsyncStorage.getItem('token')? `token ${AsyncStorage.getItem('token')}`: '';
 
 
 
 axios.defaults.baseURL = `${BASE_URL_API}`;
 axios.defaults.headers.common = {
-    Authorization: token,
+    Authorization: '',
 };
 
 export default axios;

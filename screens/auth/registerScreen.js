@@ -28,7 +28,6 @@ class RegisterScreen extends Component {
     }
 
     submit = () => {
-            console.log('clicked');
 
         let data = JSON.stringify({
             full_name: this.state.full_name,
@@ -42,7 +41,7 @@ class RegisterScreen extends Component {
         if ( this.state.full_name.length && this.state.password.length && this.state.email.length && this.state.phone.length) {
             console.log('enter', data);
             
-            axios.post('http://164.92.231.252/users/',
+            axios.post('https://livragn.com/users/',
                     data,
                     {headers:{"Content-Type" : "application/json"}})
                     .then(response => {

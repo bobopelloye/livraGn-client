@@ -14,6 +14,7 @@ import { withNavigation } from 'react-navigation';
 import Onboarding from 'react-native-onboarding-swiper';
 import { Colors, Fonts, Sizes } from "../../constants/styles";
 import { NavigationEvents } from 'react-navigation';
+import { AsyncStorage } from 'react-native'
 
 const { width, height } = Dimensions.get('screen');
 
@@ -26,6 +27,19 @@ class OnBoardingScreen extends Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+        this.getstoreData();
+    }
+
+    getstoreData = async () => {
+        console.log('rended')
+        try {
+            const t = await AsyncStorage.getItem('token')
+            if (t) {
+                this.props.navigation.navigate('BottomTabBar');
+            }
+        } catch (e) {
+            console.log('error get data', e)
+        }
     }
 
     componentWillUnmount() {

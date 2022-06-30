@@ -11,29 +11,38 @@ import { AsyncStorage } from 'react-native';
 import axios from 'axios'
 
 const offerBannersList = [
+    // {
+    //     id: '1',
+    //     image: require('../../assets/images/slider/slider_1.png'),
+    // },
+    // {
+    //     id: '2',
+    //     image: require('../../assets/images/slider/slider_2.png'),
+    // },
+    // {
+    //     id: '3',
+    //     image: require('../../assets/images/slider/slider_3.png'),
+    // },
+    // {
+    //     id: '4',
+    //     image: require('../../assets/images/slider/slider_4.png'),
+    // },
+    // {
+    //     id: '5',
+    //     image: require('../../assets/images/slider/slider_5.png'),
+    // },
+    // {
+    //     id: '6',
+    //     image: require('../../assets/images/slider/slider_6.png'),
+    // },
     {
-        id: '1',
-        image: require('../../assets/images/slider/slider_1.png'),
-    },
-    {
-        id: '2',
-        image: require('../../assets/images/slider/slider_2.png'),
-    },
-    {
+        address: "Lambagny",
+        description: null,
+        email: "rkpogomou@gmail.com",
         id: '3',
-        image: require('../../assets/images/slider/slider_3.png'),
-    },
-    {
-        id: '4',
-        image: require('../../assets/images/slider/slider_4.png'),
-    },
-    {
-        id: '5',
-        image: require('../../assets/images/slider/slider_5.png'),
-    },
-    {
-        id: '6',
-        image: require('../../assets/images/slider/slider_6.png'),
+        image: "https://livragn.com/media/restaurant_images/hc_jXTLpOH.jpg",
+        name: "HERROS && COFFEE",
+        phone: "0623803441",
     }
 ];
 
@@ -240,18 +249,18 @@ class DiscoverScreen extends Component {
         options: optionsList,
         showCustomizeBottomSheet: false,
         restaurant: offerBannersList,
-        plat: {}
+        plats:  []
     }
 
-    getAllRestaurant = async () => {
+    getAllRestaurant =  () => {
 
-        axios.get('http://164.92.231.252/restaurant', {
+        axios.get('https://livragn.com/restaurant', {
           headers: {
               'Content-Type': 'application/json',
           },      
       })      
       .then((response) => {
-        console.log('response',response.data)
+        console.log('response resto',response.data.results)
         this.setState({ restaurant: response.data.results})
       })
       .catch((error) => {
@@ -263,23 +272,23 @@ class DiscoverScreen extends Component {
     getstoreData = async () => {
         console.log('rended')
         try {
-            const t = await AsyncStorage.get('token')
+            const t = await AsyncStorage.getItem('token')
             console.log('token here', t);
         } catch (e) {
             console.log('error get data', e)
         }
     }
 
-    getAllPlat = async () => {
+    getAllPlat =  () => {
 
-        axios.get('http://164.92.231.252/plat', {
+        axios.get('https://livragn.com/plat', {
           headers: {
               'Content-Type': 'application/json',
           },      
       })      
       .then((response) => {
         console.log('PLATS',response.data)
-        this.setState({ restaurant: response.data.results})
+        this.setState({ plats: response.data.results})
       })
       .catch((error) => {
         console.log('error',error.response)
@@ -339,11 +348,9 @@ class DiscoverScreen extends Component {
                 >
                     <View style={{ flex: 1, backgroundColor: Colors.primaryColor, }}>
                         <View style={styles.pageStyle}>
-                            {this.offerBanners()}
-                            {this.categoriesInfo()}
-                            {this.productsOrderedInfo()}
-                            {this.favouriteRestaurantsInfo()}
-                            {this.hotSales()}
+                             {this.favouriteRestaurantsInfo()}
+                             {/* {this.productsOrderedInfo()} */}
+                             {this.hotSales()}
                         </View>
                     </View>
                 </CollapsingToolbar>
@@ -352,7 +359,7 @@ class DiscoverScreen extends Component {
                     visible={this.state.showSnackBar}
                     onDismiss={() => this.setState({ showSnackBar: false })}
                 >
-                    {this.state.isFavourite ? 'Removed from Favourite' : 'Added to Favourite'}
+                    {this.state.isFavourite ? 'supp favorie' : 'ajouter favorie'}
                 </Snackbar>
                 {this.selectAddressSheet()}
             </SafeAreaView >
@@ -622,18 +629,8 @@ class DiscoverScreen extends Component {
         const renderItem = ({ item }) => (
             <View style={styles.hotSalesInfoWrapStyle}>
                 <Image
-                    source={item.image}
+                    source={{uri:item.image}}
                     style={styles.hotSaleImageStyle}
-                />
-                <MaterialIcons
-                    name={item.isFavourite ? "bookmark" : "bookmark-outline"}
-                    size={22}
-                    color={Colors.whiteColor}
-                    style={{ position: 'absolute', right: 10.0, top: 10.0, }}
-                    onPress={() => {
-                        this.handleHotSalesUpdate({ id: item.id })
-                        this.setState({ isFavourite: item.isFavourite, showSnackBar: true })
-                    }}
                 />
                 <View style={{
                     paddingHorizontal: Sizes.fixPadding - 5.0,
@@ -641,14 +638,14 @@ class DiscoverScreen extends Component {
                     paddingTop: Sizes.fixPadding - 5.0
                 }}>
                     <Text style={{ ...Fonts.blackColor15Medium }}>
-                        {item.foodName}
+                        {/* {item.restaurant} */}
                     </Text>
                     <Text style={{ marginTop: Sizes.fixPadding - 7.0, ...Fonts.grayColor14Medium }}>
-                        {item.foodCategory}
+                        {item.name}
                     </Text>
                     <View style={{ marginTop: Sizes.fixPadding - 7.0, flexDirection: "row", alignItems: 'center', justifyContent: 'space-between' }}>
                         <Text style={{ ...Fonts.primaryColor20MediumBold }}>
-                            ${item.amount.toFixed(1)}
+                            {item.price.toFixed(1)} FG
                         </Text>
                         <TouchableOpacity
                             activeOpacity={0.9}
@@ -669,15 +666,15 @@ class DiscoverScreen extends Component {
             <View>
                 <View style={{ marginHorizontal: Sizes.fixPadding, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ ...Fonts.blackColor19Medium }}>
-                        Hot Sale
+                        liste des plats
                     </Text>
                     <Text style={{ ...Fonts.primaryColor16Medium }}>
-                        View all
+                        Voir tout les plats
                     </Text>
                 </View>
                 <FlatList
                     horizontal
-                    data={this.state.hotSales}
+                    data={this.state.plats}
                     keyExtractor={(item) => `${item.id}`}
                     renderItem={renderItem}
                     contentContainerStyle={{
@@ -784,7 +781,7 @@ class DiscoverScreen extends Component {
                 onPress={() => this.props.navigation.push('RestaurantDetail', { item })}
                 style={styles.favouriteRestaurentsInfoWrapStyle}>
                 <Image
-                    source={item.image}
+                    source={{uri:item.image}}
                     style={styles.favouriteRestaurentImageStyle}
                 />
 
@@ -805,10 +802,13 @@ class DiscoverScreen extends Component {
                     paddingTop: Sizes.fixPadding - 5.0
                 }}>
                     <Text numberOfLines={1} style={{ ...Fonts.blackColor15Medium }}>
-                        {item.restaurentName}
+                        {item.name}
                     </Text>
                     <Text numberOfLines={2} style={{ marginTop: Sizes.fixPadding - 7.0, ...Fonts.grayColor14Medium }}>
-                        {item.restaurentAddress}
+                        {item.address}
+                    </Text>
+                    <Text numberOfLines={2} style={{ marginTop: Sizes.fixPadding - 4.0, ...Fonts.grayColor14Medium }}>
+                        {item.phone}
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -817,15 +817,15 @@ class DiscoverScreen extends Component {
             <View>
                 <View style={{ marginHorizontal: Sizes.fixPadding, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ ...Fonts.blackColor19Medium }}>
-                        Favourite Restaurants
+                        Restaurants 
                     </Text>
                     <Text style={{ ...Fonts.primaryColor16Medium }}>
-                        View all
+                        voir plus
                     </Text>
                 </View>
                 <FlatList
                     horizontal
-                    data={this.state.favouriteRestaurents}
+                    data={this.state.restaurant}
                     keyExtractor={(item) => `${item.id}`}
                     renderItem={renderItem}
                     contentContainerStyle={{
@@ -854,7 +854,7 @@ class DiscoverScreen extends Component {
         const renderItem = ({ item }) => (
             <View style={styles.productsOrderedInfoWrapStyle}>
                 <Image
-                    source={item.image}
+                    source={{uri:item.image}}
                     style={styles.productsOrderedImageStyle}
                 />
                 <MaterialIcons
@@ -874,10 +874,10 @@ class DiscoverScreen extends Component {
                     paddingTop: Sizes.fixPadding - 5.0
                 }}>
                     <Text style={{ ...Fonts.blackColor15Medium }}>
-                        {item.foodName}
+                        {item.name}
                     </Text>
                     <Text style={{ marginTop: Sizes.fixPadding - 7.0, ...Fonts.grayColor14Medium }}>
-                        {item.foodCategory}
+                        {item.price} GNF
                     </Text>
                 </View>
             </View>
@@ -886,15 +886,15 @@ class DiscoverScreen extends Component {
             <View>
                 <View style={{ marginHorizontal: Sizes.fixPadding, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ ...Fonts.blackColor19Medium }}>
-                        Product Ordered
+                        liste des plats
                     </Text>
                     <Text style={{ ...Fonts.primaryColor16Medium }}>
-                        View all
+                        voir plus de plats
                     </Text>
                 </View>
                 <FlatList
                     horizontal
-                    data={this.state.productsOrdereds}
+                    data={this.state.plats}
                     keyExtractor={(item) => `${item.id}`}
                     renderItem={renderItem}
                     contentContainerStyle={{
@@ -946,10 +946,16 @@ class DiscoverScreen extends Component {
 
     offerBanners() {
         const renderItem = ({ item }) => (
-            <Image
-                source={item.image}
+            <View>
+                <Image
+                source={{uri:item.image}}
                 style={styles.offerBannersImageStyle}
             />
+            <Text style={{ marginTop: Sizes.fixPadding, ...Fonts.blackColor15Medium }}>
+                    {item.name}
+                </Text>
+            </View>
+            
         )
         return (
             <View>
@@ -1060,8 +1066,8 @@ const styles = StyleSheet.create({
         borderTopRightRadius: Sizes.fixPadding - 5.0
     },
     addIconWrapStyle: {
-        width: 22.0,
-        height: 22.0,
+        width: 20.0,
+        height: 20.0,
         borderRadius: 11.0,
         alignItems: 'center',
         justifyContent: 'center',
