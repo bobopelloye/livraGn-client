@@ -3,6 +3,7 @@ import { View, ScrollView, TouchableOpacity, ToastAndroid, Text, StyleSheet, Fla
 import { Fonts, Colors, Sizes } from "../../constants/styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheet } from "react-native-elements";
+import { withNavigation } from "react-navigation";
 
 const juiceList = [
     {
@@ -102,7 +103,8 @@ const optionsList = [
     },
 ];
 
-const Products = ({ props }) => {
+const Products = ({ props, navigation }) => {
+
 
     const [sizeIndex, setSizeIndex] = useState(null);
 
@@ -119,6 +121,7 @@ const Products = ({ props }) => {
     const [juices, setJuices] = useState(juiceList);
 
     const [coffees, setCoffees] = useState(coffeeList);
+    const [platSelected, setPlatSelected] = useState({});
 
     return (
         <View style={styles.pageStyle}>
@@ -126,9 +129,9 @@ const Products = ({ props }) => {
                 nestedScrollEnabled={true}
                 showsVerticalScrollIndicator={false}
             >
-                {popularItemsInfo()}
+                {/* {popularItemsInfo()} */}
                 {juiceInfo()}
-                {coffeeInfo()}
+                {/* {coffeeInfo()} */}
             </ScrollView>
             {custmizeBottomSheet()}
         </View>
@@ -140,7 +143,8 @@ const Products = ({ props }) => {
                 isVisible={showBottomSheet}
                 containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
             >
-                <View
+                <TouchableOpacity
+                    activeOpacity={0.9}
                     style={{
                         backgroundColor: Colors.whiteColor,
                         borderTopRightRadius: Sizes.fixPadding * 2.0,
@@ -152,38 +156,34 @@ const Products = ({ props }) => {
                         onPress={() => setShowBottomSheet(false)}
                     >
                         <View style={styles.bottomSheetOpenCloseDividerStyle} />
-                        {addNewItemTitle()}
+                        {/* {this.addNewItemTitle()} */}
                         {CustmizeItemInfo()}
                     </TouchableOpacity>
-                    {sizeTitle()}
-                    {sizesInfo()}
-                    {optionsTitle()}
-                    {optionsInfo()}
-                    {addToCartAndItemsInfo()}
-                </View>
+                        {addToCartAndItemsInfo()}
+                     </TouchableOpacity>
             </BottomSheet>
         )
     }
-
-    function addToCartAndItemsInfo() {
+    function  addToCartAndItemsInfo() {
         return (
             <TouchableOpacity
                 activeOpacity={0.9}
                 onPress={() => {
                     setShowBottomSheet(false)
-                    props.navigation.push('ConfirmOrder')
+                    console.log('navigation', navigation)
+                     navigation.push('ConfirmOrder', { platSelected , qty})
                 }}
                 style={styles.addToCartAndItemsInfoWrapStyle}>
                 <View>
                     <Text style={{ ...Fonts.darkPrimaryColor16Medium }}>
-                        {qty} ITEM
+                        {qty} total
                     </Text>
                     <Text style={{ ...Fonts.whiteColor15Regular }}>
-                        ${(intialAmount * qty).toFixed(1)}
+                        { platSelected ? (platSelected.price * qty).toFixed(1) + " FG" : 0}
                     </Text>
                 </View>
                 <Text style={{ ...Fonts.whiteColor16Medium }}>
-                    Add to Cart
+                    Ajouter au panier
                 </Text>
             </TouchableOpacity>
         )
@@ -322,11 +322,11 @@ const Products = ({ props }) => {
         )
     }
 
-    function CustmizeItemInfo() {
+     function CustmizeItemInfo() {
         return (
             <View style={styles.custmizeItemInfoWrapStyle}>
                 <Image
-                    source={require('../../assets/images/products/lemon_juice.png')}
+                    source={{uri: platSelected? platSelected.image : ''}}
                     style={{ width: 80.0, height: 80.0, borderRadius: Sizes.fixPadding - 5.0 }}
                 />
                 <View style={{
@@ -336,16 +336,16 @@ const Products = ({ props }) => {
                     marginLeft: Sizes.fixPadding
                 }}>
                     <Text style={{ ...Fonts.blackColor16Medium }}>
-                        Lemon Juice Fresh
+                        { platSelected.name}
                     </Text>
                     <View style={{ alignItems: 'flex-start', flexDirection: 'row', justifyContent: "space-between" }}>
                         <Text style={{ ...Fonts.primaryColor20MediumBold }}>
-                            ${(intialAmount * qty).toFixed(1)}
+                            { platSelected? (platSelected.price * qty).toFixed(1) + " FG" : 0}
                         </Text>
                         <View style={{ flexDirection: "row", alignItems: 'center' }}>
                             <TouchableOpacity
                                 activeOpacity={0.9}
-                                onPress={() => { qty > 1 ? setQty(qty - 1) : null }}
+                                onPress={() => { qty > 1 ? this.setState({ qty: qty - 1 }) : null }}
                                 style={{ backgroundColor: qty > 1 ? Colors.primaryColor : '#E0E0E0', ...styles.qtyAddRemoveButtonStyle }}>
                                 <MaterialIcons
                                     name="remove"
@@ -358,7 +358,7 @@ const Products = ({ props }) => {
                             </Text>
                             <TouchableOpacity
                                 activeOpacity={0.9}
-                                onPress={() => setQty(qty + 1)}
+                                onPress={() => setQty(qty + 1 )}
                                 style={{ backgroundColor: Colors.primaryColor, ...styles.qtyAddRemoveButtonStyle }}>
                                 <MaterialIcons
                                     name="add"
@@ -448,21 +448,25 @@ const Products = ({ props }) => {
         setCoffees(newList);
     }
 
+    function addToPanier(plat) {
+        console.log('item plat', plat)
+        setPlatSelected(plat)
+        setQty(1)
+        setShowBottomSheet(true)
+    }
+
     function juiceInfo() {
         return (
             <View style={styles.juiceInfoWrapStyle}>
-                <Text style={{ ...Fonts.blackColor19Medium }}>
-                    Juice
-                </Text>
-                <Text style={{ marginBottom: Sizes.fixPadding + 5.0, marginTop: Sizes.fixPadding - 5.0, ...Fonts.grayColor14Medium }}>
-                    2 items
+                <Text style={{ ...Fonts.blackColor19Medium , marginBottom: Sizes.fixPadding + 5.0,}}>
+                    Liste des plats par restaurant
                 </Text>
                 {
-                    juices.map((item) => (
+                    props.props && props.props.map((item) => (
                         <View key={`${item.id}`}>
                             <View style={{ flexDirection: 'row', marginBottom: Sizes.fixPadding * 2.0 }}>
                                 <Image
-                                    source={item.image}
+                                    source={{uri:item.image}}
                                     style={{ width: 90.0, height: 100.0, borderRadius: Sizes.fixPadding - 5.0 }}
                                 />
                                 <View style={{ flex: 1, marginLeft: Sizes.fixPadding }}>
@@ -486,15 +490,15 @@ const Products = ({ props }) => {
                                         />
                                     </View>
                                     <Text style={{ marginVertical: Sizes.fixPadding - 5.0, ...Fonts.grayColor14Regular }}>
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                        { item.description}
                                     </Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={{ ...Fonts.primaryColor20MediumBold }}>
-                                            ${item.amount.toFixed(1)}
+                                            {item.price.toFixed(1)} FG
                                         </Text>
                                         <TouchableOpacity
                                             activeOpacity={0.9}
-                                            onPress={() => setShowBottomSheet(true)}
+                                            onPress={() => addToPanier(item)}
                                             style={styles.addIconWrapStyle}>
                                             <MaterialIcons
                                                 name="add"
@@ -743,4 +747,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Products;
+export default withNavigation(Products);

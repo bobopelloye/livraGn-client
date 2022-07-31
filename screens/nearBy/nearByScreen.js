@@ -7,6 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { TabView, TabBar } from 'react-native-tab-view';
 import { Snackbar } from 'react-native-paper';
 import { BottomSheet } from "react-native-elements";
+import axios from 'axios'
 
 const { width } = Dimensions.get('screen');
 
@@ -72,6 +73,8 @@ const addressesList = [
 
 class NearByScreen extends Component {
 
+
+    
     state = {
         showAddressSheet: false,
         currentAddress: addressesList[0].address,
@@ -82,7 +85,7 @@ class NearByScreen extends Component {
             <SafeAreaView style={{ flex: 1, backgroundColor: Colors.bodyBackColor }}>
                 <StatusBar backgroundColor={Colors.primaryColor} />
                 <View style={{ flex: 1 }}>
-                    {this.header()}
+                    {/* {this.header()} */}
                     <TabBarView props={this.props} />
                     {this.selectAddressSheet()}
                 </View>
@@ -181,13 +184,7 @@ class NearByScreen extends Component {
 const TabBarView = ({ props }) => {
     const [index, setIndex] = useState(0);
     const [routes] = useState([
-        { key: 'first', title: 'Food' },
-        { key: 'second', title: 'Drink' },
-        { key: 'third', title: 'Fastfood' },
-        { key: 'forth', title: 'Asia' },
-        { key: 'fifth', title: 'Chinese' },
-        { key: 'sixth', title: 'Veg' },
-        { key: 'seventh', title: 'Non Veg' },
+        { key: 'first', title: 'Restaurants' },
     ]);
 
     const renderScene = ({ route, jumpTo }) => {
@@ -247,6 +244,27 @@ const Food = ({ props }) => {
     const [showSnackBar, setShowSnackBar] = useState(false);
     const [isFavourite, setIsFavourite] = useState(false);
     const [restaurants, setRestaurants] = useState(restaurantsList);
+    React.useEffect(() => {
+        getAllRestaurant()
+    }, []);
+
+    const getAllRestaurant =  () => {
+
+        axios.get('https://livragn.com/restaurant', {
+          headers: {
+              'Content-Type': 'application/json',
+          },      
+      })      
+      .then((response) => {
+        console.log('response in restau tab',response.data.results)
+        setRestaurants(response.data.results)
+      })
+      .catch((error) => {
+        console.log('error',error.response)
+
+      })
+    }
+
 
     const renderItem = ({ item }) => (
         <TouchableOpacity
@@ -254,10 +272,10 @@ const Food = ({ props }) => {
             onPress={() => props.navigation.push('RestaurantDetail', { item })}
             style={styles.restaurantWrapStyle}>
             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                <Image
-                    source={item.image}
+                {/* <Image
+                    source={{uri:item.image}}
                     style={styles.restaurantImageStyle}
-                />
+                /> */}
                 <View style={{ width: width / 2.0, marginLeft: Sizes.fixPadding, height: 100.0, justifyContent: 'space-evenly' }}>
                     <Text numberOfLines={1} style={{ ...Fonts.blackColor16Medium }}>
                         {item.name}
@@ -265,19 +283,19 @@ const Food = ({ props }) => {
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <MaterialIcons name="location-on" size={20} color={Colors.grayColor} />
                         <Text numberOfLines={1} style={{ ...Fonts.grayColor14Medium }}>
-                            {item.address}
+                            {item.address} 
                         </Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <MaterialIcons name="star" size={20} color={Colors.ratingColor} />
                         <Text style={{ marginLeft: Sizes.fixPadding - 8.0, ...Fonts.grayColor14Medium }}>
-                            {item.rating.toFixed(1)}
+                            {item.phone}
                         </Text>
                     </View>
                 </View>
             </View>
             <View style={{ marginRight: Sizes.fixPadding, paddingVertical: Sizes.fixPadding, height: 100.0, justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <MaterialIcons
+                {/* <MaterialIcons
                     name={item.isFavourite ? "bookmark" : 'bookmark-outline'}
                     size={22}
                     color={Colors.grayColor}
@@ -286,9 +304,9 @@ const Food = ({ props }) => {
                         setIsFavourite(item.isFavourite);
                         setShowSnackBar(true);
                     }}
-                />
+                /> */}
                 <Text style={{ ...Fonts.grayColor14Medium }}>
-                    {item.distance} km
+                    {/* {item.distance} km */}
                 </Text>
             </View>
         </TouchableOpacity>

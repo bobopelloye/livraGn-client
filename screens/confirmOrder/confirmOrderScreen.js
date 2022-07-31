@@ -6,6 +6,8 @@ import { Colors, Fonts, Sizes } from "../../constants/styles";
 import { TransitionPresets } from "react-navigation-stack";
 import { MaterialIcons } from '@expo/vector-icons';
 import Dialog from "react-native-dialog";
+import axios from 'axios'
+import { AsyncStorage } from 'react-native';
 
 const { width } = Dimensions.get('screen');
 
@@ -26,6 +28,16 @@ class ConfirmOrderScreen extends Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+        console.log('monted ', this.props.navigation.getParam('platSelected'))
+        if (this.props.navigation.getParam('platSelected')) {
+             console.log('monted :', this.props.navigation.getParam('platSelected', 'NO defined'))
+        this.AddPanier(this.props.navigation.getParam('platSelected'), this.props.navigation.getParam('qty'))
+        }
+        else {
+            this.showPanier()
+        }
+        
+        console.log('monted ', this.props.navigation.getParam('platSelected'))
     }
 
     componentWillUnmount() {
@@ -37,12 +49,126 @@ class ConfirmOrderScreen extends Component {
         return true;
     };
 
+    async showPanier () {
+        const t = await AsyncStorage.getItem('token')
+        let platInPanier = [];
+        let quantity = [];
+        let total = 0;
+
+        axios.get('https://livragn.com/panier/',
+        {
+          headers: {
+              'Content-Type': 'application/json',
+              "Authorization": `${t}`
+          },      
+         })      
+      .then((response) => {
+        console.log('data panier', response.data.results[0]['plats'].length)
+        if (response.data.results[0]['plats'].length) {
+            for (let i = 0; i < response.data.results[0]['plats'].length; i++) {
+                const element = response.data.results[0]['plats'][i];
+                 quantity.push(element.quantity)
+                 this.setState({quantity})
+                axios.get(`https://livragn.com/plat/${element.plat}`,
+                {
+                  headers: {
+                      'Content-Type': 'application/json',
+                      "Authorization": `${t}`
+                  },      
+                 })      
+              .then((resp) => {
+                console.log('element', element.quantity)
+                total += resp.data.price * element.quantity
+                console.log('price total',total)
+                platInPanier.push(resp.data)
+                this.setState({total})
+
+                console.log('panier arr',platInPanier)
+                this.setState({panier: platInPanier})
+              })
+              .catch((error) => {
+                console.log('error',error)
+        
+              })
+            }
+            
+        }
+      })
+      .catch((error) => {
+        console.log('error',error.response)
+
+      })
+    }
+
+     async AddPanier(plat, qty) {
+        const t = await AsyncStorage.getItem('token')
+        let platInPanier = [];
+        let quantity = [];
+        let total = 0;
+
+        axios.post('https://livragn.com/panier/add/',
+        {
+            "plats": [{
+                "quantity": qty,
+                "plat": this.props.navigation.getParam('platSelected').id
+            }]
+        },
+        {
+          headers: {
+              'Content-Type': 'application/json',
+              "Authorization": `${t}`
+          },      
+         })      
+      .then((response) => {
+        // console.log('response panier success', response.data)
+        // console.log('length panier', response.data.data.length)
+        if (response.data.data.length) {
+            for (let i = 0; i < response.data.data.length; i++) {
+                const element = response.data.data[i];
+                 quantity.push(element.quantity)
+                 this.setState({quantity})
+                axios.get(`https://livragn.com/plat/${element.plat_id}`,
+                {
+                  headers: {
+                      'Content-Type': 'application/json',
+                      "Authorization": `${t}`
+                  },      
+                 })      
+              .then((resp) => {
+                console.log('element', element.quantity)
+                total += resp.data.price * element.quantity
+                console.log('price total',total)
+                platInPanier.push(resp.data)
+                this.setState({total})
+
+                console.log('panier arr',platInPanier)
+                this.setState({panier: platInPanier})
+              })
+              .catch((error) => {
+                console.log('error',error.response)
+        
+              })
+            }
+            
+        }
+      })
+      .catch((error) => {
+        console.log('error',error.response)
+
+      })
+    }
+
     state = {
         voucherFocus: false,
         currentPaymentIndex: paymentMethods[0].id,
         showSuccessDialog: false,
+        showErrorDialog: false,
+        panier: [],
+        quantity: [],
+        total: 0,
+        address: ''
     }
-
+    
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: Colors.whiteColor }}>
@@ -52,15 +178,29 @@ class ConfirmOrderScreen extends Component {
                     <ScrollView
                         showsVerticalScrollIndicator={false}
                     >
-                        {this.deliveryToInfo()}
-                        {this.deliveryTimeInfo()}
-                        {this.orderInfo()}
-                        {this.addVoucherInfo()}
+                        {/* {this.deliveryToInfo()} */}
+                        {/* {this.deliveryTimeInfo()} */}
+                        {
+                            this.state.panier && this.state.panier.map((plat, index) => (
+                                this.orderInfo(plat, this.state.quantity[index])
+                            ))
+                        }
+                        {/* {this.addVoucherInfo()} */}
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', margin: 10 }}>
+                            <Text style={{ ...Fonts.primaryColor20MediumBold }}>
+                                Total
+                            </Text>
+                            <Text style={{ ...Fonts.primaryColor20MediumBold }}>
+                            { this.state.total } FG
+                            </Text>
+                        </View>
                         {this.noteInfo()}
-                        {this.paymentMethod()}
+                        {/* {this.paymentMethod()} */}
+                        
                         {this.confirmButton()}
                     </ScrollView>
                     {this.successDialog()}
+                    
                 </View>
             </SafeAreaView>
         )
@@ -78,28 +218,64 @@ class ConfirmOrderScreen extends Component {
                         <MaterialIcons name="done" size={35} color={Colors.primaryColor} />
                     </View>
                     <Text style={{ ...Fonts.grayColor16Medium, marginTop: Sizes.fixPadding + 5.0 }}>
-                        Your order has been placed!
+                        Votre commande a été enregistrée!
                     </Text>
                 </View>
             </Dialog.Container>
         )
     }
 
+    errorDialog() {
+        return (
+            <Dialog.Container
+                visible={this.state.showErrorDialog}
+                contentStyle={styles.dialogWrapStyle}
+                headerStyle={{ margin: 0.0 }}
+            >
+                <View style={{ backgroundColor: Colors.whiteColor, alignItems: 'center' }}>
+                    <View style={styles.successIconWrapStyle}>
+                        <MaterialIcons name="done" size={35} color={Colors.primaryColor} />
+                    </View>
+                    <Text style={{ ...Fonts.grayColor16Medium, marginTop: Sizes.fixPadding + 5.0 }}>
+                        Votre commande a echoué!
+                    </Text>
+                </View>
+            </Dialog.Container>
+        )
+    }
+
+    async submitOrder () {
+        const t = await AsyncStorage.getItem('token');
+        axios.post(`https://livragn.com/order/`,
+                {
+                    "address" : this.state.address
+                },
+                {
+                  headers: {
+                      'Content-Type': 'application/json',
+                      "Authorization": `${t}`
+                  },      
+                 })      
+              .then((resp) => {
+                this.setState({ showSuccessDialog: true })
+                console.log('success');
+                this.props.navigation.push('BottomTabBar');
+                this.setState({ showSuccessDialog: false })
+              })
+              .catch((error) => {
+                console.log('error',error.response)
+              })
+    }
+
     confirmButton() {
         return (
             <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => {
-                    this.setState({ showSuccessDialog: true })
-                    setTimeout(() => {
-                        this.setState({ showSuccessDialog: false })
-                        this.props.navigation.push('BottomTabBar');
-                    }, 2000);
-                }}
+                onPress={() => this.submitOrder()}
                 style={styles.confirmButtonStyle}
             >
                 <Text style={{ ...Fonts.whiteColor16Medium }}>
-                    Confirm
+                    Confirmer votre commande
                 </Text>
             </TouchableOpacity>
         )
@@ -157,19 +333,18 @@ class ConfirmOrderScreen extends Component {
                     padding: Sizes.fixPadding,
                     marginTop: Sizes.fixPadding - 5.0,
                 }}>
-                    <Text style={{ ...Fonts.grayColor16Medium }}>
-                        Note
-                    </Text>
                 </View>
                 <TextInput
-                    placeholder="Enter Note Here"
+                    placeholder="Adresse de livraison *"
                     textAlignVertical = "top"
                     style={{ marginVertical: Sizes.fixPadding, paddingHorizontal: Sizes.fixPadding + 5.0, paddingVertical: Sizes.fixPadding + 5.0,...Fonts.blackColor15Regular, marginHorizontal: Sizes.fixPadding, backgroundColor: Colors.bodyBackColor }}
                     multiline={true}
                     numberOfLines={5}
-                    placeholder="Enter Note Here"
+                    value={this.state.address}
+                    onChangeText={(val) => this.setState({address: val})}
+                    placeholder="Adresse de livraison *"
                     placeholderTextColor={Colors.grayColor}
-                    selectionColor={Colors.primaryColor}
+                    selectionColor={Colors.primaryColor}    
                 />
             </View>
         )
@@ -220,48 +395,41 @@ class ConfirmOrderScreen extends Component {
         )
     }
 
-    orderInfo() {
+    orderInfo(plat, qty) {
         return (
             <View style={{ marginHorizontal: Sizes.fixPadding, marginTop: Sizes.fixPadding, }}>
                 <View style={{ marginBottom: Sizes.fixPadding + 5.0, flexDirection: 'row', alignItems: 'center', }}>
                     <Image
-                        source={require('../../assets/images/products/lemon_juice.png')}
+                        source={{uri:plat.image}}
                         style={{ width: 80.0, height: 80.0, borderRadius: Sizes.fixPadding - 5.0 }}
                     />
                     <View style={{ marginLeft: Sizes.fixPadding + 5.0 }}>
                         <Text style={{ ...Fonts.blackColor16Medium }}>
-                            Kichi Coffee & Dring
+                           { plat.name}
                         </Text>
                         <Text style={{ ...Fonts.grayColor14Medium }}>
-                            Lemon Juice Fresh
+                            {plat.restaurant}
                         </Text>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ ...Fonts.blackColor16Medium }}>
-                        Subtotal (1 item)
+                        Quantite :  { qty}
                     </Text>
                     <Text style={{ ...Fonts.blackColor16Medium }}>
-                        $2.9
+                       { qty * plat.price } FG
                     </Text>
                 </View>
                 <View style={{ marginTop: Sizes.fixPadding, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ ...Fonts.blackColor16Medium }}>
-                        Ship Fee (2.4 Km)
+                        Frais de livraison 
                     </Text>
                     <Text style={{ ...Fonts.blackColor16Medium }}>
-                        $1.3
+                         0 FG
                     </Text>
                 </View>
                 <View style={{ marginVertical: Sizes.fixPadding + 2.0, backgroundColor: Colors.grayColor, height: 0.50, }} />
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ ...Fonts.primaryColor20MediumBold }}>
-                        Total
-                    </Text>
-                    <Text style={{ ...Fonts.primaryColor20MediumBold }}>
-                        $4.2
-                    </Text>
-                </View>
+               
             </View>
         )
     }
@@ -350,16 +518,16 @@ class ConfirmOrderScreen extends Component {
                 />
                 <View style={styles.confirmOrderTitleWithIdWrapStyle}>
                     <Text style={{ ...Fonts.blackColor22Medium }}>
-                        Confirm Order
+                        Confirme commande
                     </Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={{ ...Fonts.grayColor17Medium }}>
                             ID:
                         </Text>
                         <Text style={{ ...Fonts.blackColor17Medium }}>
                             43e2116
                         </Text>
-                    </View>
+                    </View> */}
                 </View>
             </View>
         )

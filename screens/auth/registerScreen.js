@@ -42,15 +42,18 @@ class RegisterScreen extends Component {
             console.log('enter', data);
             
             axios.post('https://livragn.com/users/',
-                    data,
+                    {
+                        full_name: this.state.full_name,
+                        email: this.state.email,
+                        password: this.state.password,
+                        phone: this.state.phone
+                    },
                     {headers:{"Content-Type" : "application/json"}})
                     .then(response => {
-                    console.log('success', response.data)
-                    if (response.data) {
-                        this.props.navigation.navigate('BottomTabBar');
-                    }
-                    })
-                    .catch(error => console.log('error', error))
+                        console.log('success', response.data)
+                            this.props.navigation.push('Signin');
+                        })
+                    .catch(error => console.log('error', error.response))
         }
         else {
             console.log('inputs empty')

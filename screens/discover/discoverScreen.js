@@ -249,7 +249,16 @@ class DiscoverScreen extends Component {
         options: optionsList,
         showCustomizeBottomSheet: false,
         restaurant: offerBannersList,
-        plats:  []
+        plats:  [],
+        platSelected : {
+            "description": "",
+            "id": null,
+            "image": "",
+            "name": "",
+            "price": null,
+            "remise_prix": 0,
+            "restaurant": null
+        }
     }
 
     getAllRestaurant =  () => {
@@ -323,11 +332,11 @@ class DiscoverScreen extends Component {
                     }
                     rightItem={
                         <MaterialIcons
-                            name="notifications"
+                            name="shopping-cart"
                             size={25}
                             color={Colors.whiteColor}
                             style={{ marginTop: Sizes.fixPadding + 5.0, }}
-                            onPress={() => this.props.navigation.push('Notifications')}
+                            onPress={() => this.props.navigation.push('ConfirmOrder')}
                         />
                     }
                     element={
@@ -351,6 +360,7 @@ class DiscoverScreen extends Component {
                              {this.favouriteRestaurantsInfo()}
                              {/* {this.productsOrderedInfo()} */}
                              {this.hotSales()}
+                             {/* { this.categoriesInfo()} */}
                         </View>
                     </View>
                 </CollapsingToolbar>
@@ -394,15 +404,11 @@ class DiscoverScreen extends Component {
                         onPress={() => this.setState({ showCustomizeBottomSheet: false })}
                     >
                         <View style={styles.bottomSheetOpenCloseDividerStyle} />
-                        {this.addNewItemTitle()}
+                        {/* {this.addNewItemTitle()} */}
                         {this.CustmizeItemInfo()}
                     </TouchableOpacity>
-                    {this.sizeTitle()}
-                    {this.sizesInfo()}
-                    {this.optionsTitle()}
-                    {this.optionsInfo()}
-                    {this.addToCartAndItemsInfo()}
-                </TouchableOpacity>
+                        {this.addToCartAndItemsInfo()}
+                     </TouchableOpacity>
             </BottomSheet>
         )
     }
@@ -413,19 +419,19 @@ class DiscoverScreen extends Component {
                 activeOpacity={0.9}
                 onPress={() => {
                     this.setState({ showCustomizeBottomSheet: false })
-                    this.props.navigation.push('ConfirmOrder')
+                    this.props.navigation.push('ConfirmOrder', { platSelected : this.state.platSelected, qty: this.state.qty})
                 }}
                 style={styles.addToCartAndItemsInfoWrapStyle}>
                 <View>
                     <Text style={{ ...Fonts.darkPrimaryColor16Medium }}>
-                        {this.state.qty} ITEM
+                        {this.state.qty} total
                     </Text>
                     <Text style={{ ...Fonts.whiteColor15Regular }}>
-                        ${(intialAmount * this.state.qty).toFixed(1)}
+                        { this.state.platSelected ? (this.state.platSelected.price * this.state.qty).toFixed(1) + " FG" : 0}
                     </Text>
                 </View>
                 <Text style={{ ...Fonts.whiteColor16Medium }}>
-                    Add to Cart
+                    Ajouter au panier
                 </Text>
             </TouchableOpacity>
         )
@@ -545,7 +551,7 @@ class DiscoverScreen extends Component {
                 marginBottom: Sizes.fixPadding + 5.0,
                 ...Fonts.blackColor19Medium
             }}>
-                Add New Item
+                Ajouter au panier
             </Text>
         )
     }
@@ -567,7 +573,7 @@ class DiscoverScreen extends Component {
         return (
             <View style={styles.custmizeItemInfoWrapStyle}>
                 <Image
-                    source={require('../../assets/images/products/lemon_juice.png')}
+                    source={{uri: this.state.platSelected? this.state.platSelected.image : ''}}
                     style={{ width: 80.0, height: 80.0, borderRadius: Sizes.fixPadding - 5.0 }}
                 />
                 <View style={{
@@ -577,11 +583,11 @@ class DiscoverScreen extends Component {
                     marginLeft: Sizes.fixPadding
                 }}>
                     <Text style={{ ...Fonts.blackColor16Medium }}>
-                        Lemon Juice Fresh
+                        { this.state.platSelected.name}
                     </Text>
                     <View style={{ alignItems: 'flex-start', flexDirection: 'row', justifyContent: "space-between" }}>
                         <Text style={{ ...Fonts.primaryColor20MediumBold }}>
-                            ${(intialAmount * this.state.qty).toFixed(1)}
+                            { this.state.platSelected? (this.state.platSelected.price * this.state.qty).toFixed(1) + " FG" : 0}
                         </Text>
                         <View style={{ flexDirection: "row", alignItems: 'center' }}>
                             <TouchableOpacity
@@ -625,6 +631,13 @@ class DiscoverScreen extends Component {
         this.setState({ hotSales: newList });
     }
 
+    addToPanier(plat) {
+        console.log('item plat', plat)
+        this.setState({ platSelected: plat })
+        this.setState({qty: 1})
+        this.setState({ showCustomizeBottomSheet: true })
+    }
+
     hotSaleInfo() {
         const renderItem = ({ item }) => (
             <View style={styles.hotSalesInfoWrapStyle}>
@@ -649,7 +662,7 @@ class DiscoverScreen extends Component {
                         </Text>
                         <TouchableOpacity
                             activeOpacity={0.9}
-                            onPress={() => this.setState({ showCustomizeBottomSheet: true })}
+                            onPress={() =>  this.addToPanier(item)}
                             style={styles.addIconWrapStyle}
                         >
                             <MaterialIcons
@@ -718,7 +731,7 @@ class DiscoverScreen extends Component {
                             size={22}
                         />
                         <Text style={{ marginLeft: Sizes.fixPadding, ...Fonts.blueColor15Medium }}>
-                            Add New Address
+                            Nouvelle addresse
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -778,7 +791,7 @@ class DiscoverScreen extends Component {
         const renderItem = ({ item }) => (
             <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => this.props.navigation.push('RestaurantDetail', { item })}
+                onPress={() => this.props.navigation.push('RestaurantDetail', { item, props:this.props })}
                 style={styles.favouriteRestaurentsInfoWrapStyle}>
                 <Image
                     source={{uri:item.image}}

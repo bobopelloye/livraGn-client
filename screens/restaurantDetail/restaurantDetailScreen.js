@@ -15,6 +15,7 @@ class RestaurantDetailScreen extends Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+        console.log(' params', this.props.navigation.getParam('item').plats)
     }
 
     componentWillUnmount() {
@@ -26,7 +27,6 @@ class RestaurantDetailScreen extends Component {
         return true;
     };
 
-    item = this.props.navigation.getParam('item');
 
     state = {
         isFavourite: false,
@@ -34,6 +34,7 @@ class RestaurantDetailScreen extends Component {
     }
 
     render() {
+        const item  = this.props.navigation.getParam('item');
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: Colors.bodyBackColor }}>
                 <CollapsingToolbar
@@ -64,7 +65,7 @@ class RestaurantDetailScreen extends Component {
                     element={
                         <View>
                             <Text style={{ ...Fonts.whiteColor22Medium }}>
-                                Bar 61 Restaurant
+                                { item.name} 
                             </Text>
                             <View style={{ marginTop: Sizes.fixPadding - 2.0, flexDirection: 'row', alignItems: 'center' }}>
                                 <MaterialIcons
@@ -73,7 +74,7 @@ class RestaurantDetailScreen extends Component {
                                     color={Colors.whiteColor}
                                 />
                                 <Text style={{ marginLeft: Sizes.fixPadding - 8.0, ...Fonts.whiteColor14Regular }}>
-                                    76A England
+                                    { item.address}
                                 </Text>
                             </View>
                             <View style={{ marginTop: Sizes.fixPadding - 2.0, flexDirection: 'row', alignItems: 'center' }}>
@@ -92,11 +93,11 @@ class RestaurantDetailScreen extends Component {
                     toolbarMinHeight={50}
                     toolbarMaxHeight={200}
                     isImageBlur={true}
-                    src={require('../../assets/images/restaurant/restaurant_3.png')}
+                    src={{ uri: item.image}}
                     childrenMinHeight={720}
                 >
                     <View style={{ flex: 1, backgroundColor: Colors.primaryColor, }}>
-                        <TabBarView props={this.props} />
+                        <TabBarView props={{ props: this.props.navigation.getParam('item').plats, navigation: this.props}} />
                     </View>
                 </CollapsingToolbar>
                 <Snackbar
@@ -122,6 +123,7 @@ const TabBarView = ({ props }) => {
 
     const layout = useWindowDimensions();
 
+
     const renderScene = ({ route, jumpTo }) => {
         switch (route.key) {
             case 'first':
@@ -134,27 +136,7 @@ const TabBarView = ({ props }) => {
     };
 
     return (
-        <TabView
-            navigationState={{ index, routes }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            renderTabBar={props => (
-                <TabBar
-                    {...props}
-                    indicatorStyle={{ height: 2.5, marginLeft: index == 0 ? Sizes.fixPadding + 5.0 : 0.0, backgroundColor: Colors.darkPrimaryColor, }}
-                    tabStyle={{
-                        width: layout.width / 3.1,
-                        height: 52.0,
-                    }}
-                    style={{ backgroundColor: Colors.primaryColor, elevation: 0.0 }}
-                    renderLabel={({ route, focused, color }) => (
-                        <Text style={{ marginLeft: index == 0 ? Sizes.fixPadding + 5.0 : 0.0, marginRight: index == 2 ? Sizes.fixPadding : 0.0, ...Fonts.whiteColor15Medium }}>
-                            {route.title}
-                        </Text>
-                    )}
-                />
-            )}
-        />
+        <Products props={props} />
     )
 }
 
