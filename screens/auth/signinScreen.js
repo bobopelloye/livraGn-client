@@ -7,6 +7,7 @@ import { NavigationEvents } from 'react-navigation';
 import axios from 'axios'
 const { height } = Dimensions.get('screen');
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../../components/loader'
 class SigninScreen extends Component {
 
     constructor(props) {
@@ -16,6 +17,7 @@ class SigninScreen extends Component {
 
     state = {
         redirect: false,
+        visible: false
     }
 
     componentDidMount() {
@@ -32,8 +34,7 @@ class SigninScreen extends Component {
     };
 
     login = () => {
-         console.log('clicked');
-
+        this.setState({visible: true})
         let data = JSON.stringify({
             username: this.state.username,
             password: this.state.password
@@ -48,14 +49,19 @@ class SigninScreen extends Component {
                  .then(response => {
                     console.log('success', response.data)
                     this.storeData(`token ${response.data.token}`);
+
                     if (response.data.token) {
+                        this.setState({visible: false})
                         this.setState({ redirect: true})
                         this.props.navigation.navigate('BottomTabBar');
                     }
                  })
-                 .catch(error => console.log('error', error))
+                 .catch(error => {
+                    this.setState({visible: false})
+                 })
         }
         else {
+            this.setState({visible: false})
             console.log('inputs empty')
         }
     }
@@ -115,6 +121,7 @@ class SigninScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: Colors.bodyBackColor }}>
+                <Loader isVisible={this.state.visible}/>
                 <StatusBar backgroundColor={Colors.primaryColor} />
                 <NavigationEvents onDidFocus={() => {
                     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));

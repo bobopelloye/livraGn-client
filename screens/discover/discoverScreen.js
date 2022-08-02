@@ -10,6 +10,8 @@ import { BottomSheet } from "react-native-elements";
 import { AsyncStorage } from 'react-native';
 import axios from 'axios'
 
+
+
 const offerBannersList = [
     // {
     //     id: '1',

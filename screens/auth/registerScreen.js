@@ -4,6 +4,7 @@ import { withNavigation } from "react-navigation";
 import { Colors, Fonts, Sizes } from "../../constants/styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
+import Loader from '../../components/loader'
 
 class RegisterScreen extends Component {
 
@@ -25,10 +26,11 @@ class RegisterScreen extends Component {
         password: '',
         email: '',
         phone: '',
+        visible: false
     }
 
     submit = () => {
-
+        this.setState({visible: true})
         let data = JSON.stringify({
             full_name: this.state.full_name,
             email: this.state.email,
@@ -50,12 +52,17 @@ class RegisterScreen extends Component {
                     },
                     {headers:{"Content-Type" : "application/json"}})
                     .then(response => {
+                        this.setState({visible: false})
                         console.log('success', response.data)
                             this.props.navigation.push('Signin');
                         })
-                    .catch(error => console.log('error', error.response))
+                    .catch(error => {
+                        console.log('error', error.response)
+                        this.setState({visible: false})
+                    })
         }
         else {
+            this.setState({visible: false})
             console.log('inputs empty')
         }
     }
@@ -64,6 +71,7 @@ class RegisterScreen extends Component {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: Colors.bodyBackColor }}>
                 <StatusBar backgroundColor={Colors.primaryColor} />
+                <Loader isVisible={this.state.visible}/>
                 <View style={{ flex: 1, }}>
                     {this.backArrow()}
                     <ScrollView

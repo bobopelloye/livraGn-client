@@ -243,7 +243,7 @@ const Food = ({ props }) => {
 
     const [showSnackBar, setShowSnackBar] = useState(false);
     const [isFavourite, setIsFavourite] = useState(false);
-    const [restaurants, setRestaurants] = useState(restaurantsList);
+    const [restaurants, setRestaurants] = useState([]);
     React.useEffect(() => {
         getAllRestaurant()
     }, []);
@@ -272,10 +272,10 @@ const Food = ({ props }) => {
             onPress={() => props.navigation.push('RestaurantDetail', { item })}
             style={styles.restaurantWrapStyle}>
             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                {/* <Image
-                    source={{uri:item.image}}
+                <Image
+                    source={{uri: item.image? item.image : ""}}
                     style={styles.restaurantImageStyle}
-                /> */}
+                />
                 <View style={{ width: width / 2.0, marginLeft: Sizes.fixPadding, height: 100.0, justifyContent: 'space-evenly' }}>
                     <Text numberOfLines={1} style={{ ...Fonts.blackColor16Medium }}>
                         {item.name}

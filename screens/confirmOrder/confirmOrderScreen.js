@@ -8,6 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import Dialog from "react-native-dialog";
 import axios from 'axios'
 import { AsyncStorage } from 'react-native';
+import Loader from '../../components/loader'
 
 const { width } = Dimensions.get('screen');
 
@@ -166,13 +167,15 @@ class ConfirmOrderScreen extends Component {
         panier: [],
         quantity: [],
         total: 0,
-        address: ''
+        address: '',
+        visible: false
     }
     
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: Colors.whiteColor }}>
                 <StatusBar backgroundColor={Colors.primaryColor} />
+                <Loader isVisible={this.state.visible}/>
                 <View style={{ flex: 1 }}>
                     {this.header()}
                     <ScrollView
@@ -245,8 +248,10 @@ class ConfirmOrderScreen extends Component {
     }
 
     async submitOrder () {
+        this.setState({visible: true})
         const t = await AsyncStorage.getItem('token');
-        axios.post(`https://livragn.com/order/`,
+        if (this.state.address.length) {
+             axios.post(`https://livragn.com/order/`,
                 {
                     "address" : this.state.address
                 },
@@ -258,13 +263,21 @@ class ConfirmOrderScreen extends Component {
                  })      
               .then((resp) => {
                 this.setState({ showSuccessDialog: true })
+                this.setState({visible: false})
                 console.log('success');
                 this.props.navigation.push('BottomTabBar');
                 this.setState({ showSuccessDialog: false })
               })
               .catch((error) => {
+                this.setState({visible: false})
                 console.log('error',error.response)
               })
+        }
+        else {
+            this.setState({visible: false})
+            console.log('error: addresse doit etre fourni')
+        }
+       
     }
 
     confirmButton() {
