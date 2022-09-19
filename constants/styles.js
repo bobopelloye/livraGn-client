@@ -197,13 +197,13 @@ export const Fonts = {
 export const Colors = {
     whiteColor: '#ffffff',
     blackColor: '#000000',
-    primaryColor: '#F2647C',
+    primaryColor: '#f7941d',
     bodyBackColor: '#F4F4F4',
     grayColor: '#9E9E9E',
-    darkPrimaryColor: '#CA445D',
+    darkPrimaryColor: '#ef4136',
     ratingColor: '#CDDC39',
     orangeRatingColor: '#FF9800',
-    redColor: '#F44336',
+    redColor: '#ef4136',
 }
 
 export const Sizes = {

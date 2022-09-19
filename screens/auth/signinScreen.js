@@ -48,6 +48,7 @@ class SigninScreen extends Component {
                   {headers:{"Content-Type" : "application/json"}})
                  .then(response => {
                     console.log('success', response.data)
+                    console.log('success', response.data)
                     this.storeData(`token ${response.data.token}`);
 
                     if (response.data.token) {
@@ -57,6 +58,7 @@ class SigninScreen extends Component {
                     }
                  })
                  .catch(error => {
+                    console.log('error', error.response)
                     this.setState({visible: false})
                  })
         }

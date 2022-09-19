@@ -212,11 +212,11 @@ class ProfileScreen extends Component {
         return (
             <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => this.props.navigation.push('EditProfile')}
+                onPress={() => this.props.navigation.push('EditProfile', { userCurrent : this.state.currentUser})}
                 style={styles.userInfoWrapStyle}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
-                        source={require('../../assets/images/login-icon.png')}
+                        source={{uri:`${this.state.currentUser? this.state.currentUser.avatar:""}`}}
                         style={{
                             width: 70.0, height: 70.0,
                             borderRadius: Sizes.fixPadding - 5.0,

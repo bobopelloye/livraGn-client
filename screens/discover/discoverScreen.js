@@ -344,7 +344,7 @@ class DiscoverScreen extends Component {
                     element={
                         <TouchableOpacity
                             activeOpacity={0.9}
-                            // onPress={() => this.props.navigation.push('Search')}
+                            // bonPress={() => this.props.navigation.push('Search')}
                             style={styles.searchInfoWrapStyle}>
                             <MaterialIcons name="search" size={22} color={Colors.whiteColor} />
                             <Text style={{ marginLeft: Sizes.fixPadding, ...Fonts.lightPrimaryColor16Regular }}>
