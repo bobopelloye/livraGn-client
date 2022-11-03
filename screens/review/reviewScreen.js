@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 const reviewsList = [
     {
         id: '1',
-        image: require('../../assets/images/user_profile/user_1.jpg'),
+        image: '',
         name: 'Robert Junior',
         rating: 5.0,
         review: 'Very good.',
@@ -14,7 +14,7 @@ const reviewsList = [
     },
     {
         id: '2',
-        image: require('../../assets/images/user_profile/user_2.jpg'),
+        image: '',
         name: 'Mark Lynn',
         rating: 4.0,
         review: 'Awesome Quality.',
@@ -22,7 +22,7 @@ const reviewsList = [
     },
     {
         id: '3',
-        image: require('../../assets/images/user_profile/user_3.jpg'),
+        image: '',
         name: 'Ellison Perry',
         rating: 3.0,
         review: 'Super.',
@@ -30,7 +30,7 @@ const reviewsList = [
     },
     {
         id: '4',
-        image: require('../../assets/images/user_profile/user_4.jpg'),
+        image: '',
         name: 'Emma Waston',
         rating: 5.0,
         review: 'Good.',
@@ -38,7 +38,7 @@ const reviewsList = [
     },
     {
         id: '5',
-        image: require('../../assets/images/user_profile/user_5.jpg'),
+        image: '',
         name: 'Shira Maxwell',
         rating: 2.0,
         review: 'Mind Blowing.',
@@ -46,7 +46,7 @@ const reviewsList = [
     },
     {
         id: '6',
-        image: require('../../assets/images/user_profile/user_6.jpg'),
+        image: '',
         name: 'David Smith',
         rating: 4.0,
         review: 'Fabulous..',
@@ -54,7 +54,7 @@ const reviewsList = [
     },
     {
         id: '7',
-        image: require('../../assets/images/user_profile/user_7.jpg'),
+        image: '',
         name: 'Bill Hussey',
         rating: 5.0,
         review: 'Very good.',

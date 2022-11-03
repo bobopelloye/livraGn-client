@@ -8,30 +8,6 @@ import { Snackbar } from "react-native-paper";
 const { width } = Dimensions.get('screen');
 
 const favouriteFoodList = [
-    {
-        key: '1',
-        image: require('../../assets/images/products/orange_juice.png'),
-        name: 'Orange Juice',
-        deliveredFrom: 'Bar 61 Restaurant',
-        rating: 4.5,
-        amount: 12.5,
-    },
-    {
-        key: '2',
-        image: require('../../assets/images/products/products_4.png'),
-        name: 'Delicious Pizza',
-        deliveredFrom: 'Core by Clare Smyth',
-        rating: 4.2,
-        amount: 15.9,
-    },
-    {
-        key: '3',
-        image: require('../../assets/images/products/products_10.png'),
-        name: 'Choco Lava Cake',
-        deliveredFrom: 'Amrutha Lounge',
-        rating: 5.0,
-        amount: 8.7,
-    },
 ];
 
 const rowSwipeAnimatedValues = {};

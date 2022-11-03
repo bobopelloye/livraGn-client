@@ -65,7 +65,7 @@ class ProfileScreen extends Component {
                             backgroundColor: Colors.bodyBackColor
                         }}
                     >
-                        {this.paymentAddressAndVoucherSetting()}
+                        {/* {this.paymentAddressAndVoucherSetting()} */}
                         {this.settingsInfo()}
                         {this.logOutInfo()}
                     </ScrollView>
@@ -165,10 +165,10 @@ class ProfileScreen extends Component {
                     activeOpacity={0.9}
                     onPress={() => this.props.navigation.push('Notifications')}
                 >
-                    {this.settings({
+                    {/* {this.settings({
                         icon: <MaterialIcons name="notifications" size={24} color={Colors.grayColor} />,
                         setting: 'Notifications'
-                    })}
+                    })} */}
                 </TouchableOpacity>
                 {this.settings({
                     icon: <MaterialIcons name="language" size={24} color={Colors.grayColor} />,

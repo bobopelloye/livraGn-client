@@ -48,126 +48,45 @@ const offerBannersList = [
     }
 ];
 
-const categoriesList = [
-    {
-        id: '1',
-        image: require('../../assets/images/category/all.png'),
-        type: 'All',
-    },
-    {
-        id: '2',
-        image: require('../../assets/images/category/coffee.png'),
-        type: 'Coffee',
-    },
-    {
-        id: '3',
-        image: require('../../assets/images/category/drink.png'),
-        type: 'Drink',
-    },
-    {
-        id: '4',
-        image: require('../../assets/images/category/fastfood.png'),
-        type: 'FastFood',
-    },
-    {
-        id: '5',
-        image: require('../../assets/images/category/pizza.png'),
-        type: 'Pizza',
-    },
-    {
-        id: '6',
-        image: require('../../assets/images/category/snacks.png'),
-        type: 'Snacks',
-    }
-];
+// const categoriesList = [
+//     {
+//         id: '1',
+//         image: require('../../assets/images/category/all.png'),
+//         type: 'All',
+//     },
+//     {
+//         id: '2',
+//         image: require('../../assets/images/category/coffee.png'),
+//         type: 'Coffee',
+//     },
+//     {
+//         id: '3',
+//         image: require('../../assets/images/category/drink.png'),
+//         type: 'Drink',
+//     },
+//     {
+//         id: '4',
+//         image: require('../../assets/images/category/fastfood.png'),
+//         type: 'FastFood',
+//     },
+//     {
+//         id: '5',
+//         image: require('../../assets/images/category/pizza.png'),
+//         type: 'Pizza',
+//     },
+//     {
+//         id: '6',
+//         image: require('../../assets/images/category/snacks.png'),
+//         type: 'Snacks',
+//     }
+// ];
 
-const productsOrderedList = [
-    {
-        id: '1',
-        image: require("../../assets/images/products/products_6.png"),
-        foodName: 'Fried Noodles',
-        foodCategory: 'Chinese',
-        isFavourite: false,
-    },
-    {
-        id: '2',
-        image: require("../../assets/images/products/products_1.png"),
-        foodName: 'Hakka Nuddles',
-        foodCategory: 'Chinese',
-        isFavourite: false,
-    },
-    {
-        id: '3',
-        image: require("../../assets/images/products/products_2.png"),
-        foodName: 'Dry Manchuriyan',
-        foodCategory: 'Chinese',
-        isFavourite: false,
-    },
-    {
-        id: '4',
-        image: require("../../assets/images/products/products_3.png"),
-        foodName: 'Margherita Pizza',
-        foodCategory: 'Delicious Pizza',
-        isFavourite: false,
-    },
-    {
-        id: '5',
-        image: require("../../assets/images/products/products_4.png"),
-        foodName: 'Thin Crust Pizza',
-        foodCategory: 'Delicious Pizza',
-        isFavourite: false,
-    },
-    {
-        id: '6',
-        image: require("../../assets/images/products/products_5.png"),
-        foodName: 'Veg Burger',
-        foodCategory: 'Fast Food',
-        isFavourite: false,
-    },
-];
 
-const favouriteRestaurantsList = [
-    {
-        id: '1',
-        image: require('../../assets/images/restaurant/restaurant_5.png'),
-        restaurentName: 'Bar 61 Restaurant',
-        restaurentAddress: '76A England',
-        isFavourite: false,
-    },
-    {
-        id: '2',
-        image: require('../../assets/images/restaurant/restaurant_4.png'),
-        restaurentName: 'Core by Clare',
-        restaurentAddress: '220 Opera Street',
-        isFavourite: false,
-    },
-    {
-        id: '3',
-        image: require('../../assets/images/restaurant/restaurant_3.png'),
-        restaurentName: 'Amrutha Lounge',
-        restaurentAddress: '90B Silicon Velley',
-        isFavourite: false,
-    },
-    {
-        id: '4',
-        image: require('../../assets/images/restaurant/restaurant_2.png'),
-        restaurentName: 'The Barbary',
-        restaurentAddress: '99C OBC Area',
-        isFavourite: false,
-    },
-    {
-        id: '5',
-        image: require('../../assets/images/restaurant/restaurant_1.png'),
-        restaurentName: 'The Palomor',
-        restaurentAddress: '31A Om Colony',
-        isFavourite: false,
-    }
-];
 
 const hotSalesList = [
     {
         id: '1',
-        image: require("../../assets/images/products/products_6.png"),
+        image: '',
         foodName: 'Margherita Pizza',
         foodCategory: 'Delicious Pizza',
         amount: 5.0,
@@ -175,7 +94,7 @@ const hotSalesList = [
     },
     {
         id: '2',
-        image: require("../../assets/images/products/products_4.png"),
+        image: '',
         foodName: 'Thin Crust Pizza',
         foodCategory: 'Delicious Pizza',
         amount: 12.0,
@@ -183,7 +102,7 @@ const hotSalesList = [
     },
     {
         id: '3',
-        image: require("../../assets/images/products/products_5.png"),
+        image: '',
         foodName: 'Veg Burger',
         foodCategory: 'Fast Food',
         amount: 4.0,
@@ -191,7 +110,7 @@ const hotSalesList = [
     },
     {
         id: '4',
-        image: require("../../assets/images/products/products_6.png"),
+        image: '',
         foodName: 'Fried Noodles',
         foodCategory: 'Chinese',
         amount: 11.0,
@@ -199,7 +118,7 @@ const hotSalesList = [
     },
     {
         id: '5',
-        image: require("../../assets/images/products/products_1.png"),
+        image: '',
         foodName: 'Hakka Noodles',
         foodCategory: 'Chinese',
         amount: 7.0,
@@ -207,7 +126,7 @@ const hotSalesList = [
     },
     {
         id: '6',
-        image: require("../../assets/images/products/products_2.png"),
+        image: '',
         foodName: 'Dry Manchuriyan',
         foodCategory: 'Chinese',
         amount: 9.9,
@@ -218,7 +137,7 @@ const hotSalesList = [
 const addressesList = [
     {
         id: '1',
-        address: 'Nongo, conakry, GN.'
+        address: 'Nongo, conakry, GN'
     },
     {
         id: '2',
@@ -237,8 +156,7 @@ class DiscoverScreen extends Component {
         this.getstoreData();
     }
     state = {
-        productsOrdereds: productsOrderedList,
-        favouriteRestaurents: favouriteRestaurantsList,
+        // favouriteRestaurents: favouriteRestaurantsList,
         hotSales: hotSalesList,
         showSnackBar: false,
         isFavourite: false,
@@ -318,17 +236,17 @@ class DiscoverScreen extends Component {
                     leftItem={
                         <TouchableOpacity
                             activeOpacity={0.9}
-                            onPress={() => this.setState({ showAddressSheet: true })}
+                            onPress={() => this.setState({ showAddressSheet: false })}
                             style={{ marginLeft: Sizes.fixPadding * 2.0, marginTop: Sizes.fixPadding }}>
                             <Text style={{ ...Fonts.darkPrimaryColor15Medium }}>
-                                LIVRER À
+                                LIVRA GN
                             </Text>
                             <View style={{ marginTop: Sizes.fixPadding - 8.0, flexDirection: 'row', alignItems: 'center' }}>
                                 <MaterialIcons name='location-on' size={17} color={Colors.whiteColor} />
                                 <Text numberOfLines={1} style={{ maxWidth: width / 1.7, ...Fonts.whiteColor14Medium }}>
                                     {this.state.currentAddress}
                                 </Text>
-                                <MaterialIcons name="arrow-drop-down" size={20} color={Colors.whiteColor} />
+                                {/* <MaterialIcons name="arrow-drop-down" size={20} color={Colors.whiteColor} /> */}
                             </View>
                         </TouchableOpacity>
                     }
@@ -923,41 +841,41 @@ class DiscoverScreen extends Component {
         )
     }
 
-    categoriesInfo() {
-        const renderItem = ({ item }) => (
-            <View style={{ alignItems: 'center', marginRight: Sizes.fixPadding * 2.0, }}>
-                <View style={styles.categoryImageWrapStyle}>
-                    <Image
-                        source={item.image}
-                        style={{ width: 40.0, height: 40.0, }}
-                        resizeMode="contain"
-                    />
-                </View>
-                <Text style={{ marginTop: Sizes.fixPadding, ...Fonts.blackColor15Medium }}>
-                    {item.type}
-                </Text>
-            </View>
-        )
-        return (
-            <View>
-                <Text style={{ ...Fonts.blackColor19Medium, marginHorizontal: Sizes.fixPadding, }}>
-                    Categories
-                </Text>
-                <FlatList
-                    horizontal
-                    data={categoriesList}
-                    keyExtractor={(item) => `${item.id}`}
-                    renderItem={renderItem}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{
-                        paddingLeft: Sizes.fixPadding + 5.0,
-                        paddingBottom: Sizes.fixPadding * 3.0,
-                        paddingTop: Sizes.fixPadding,
-                    }}
-                />
-            </View>
-        )
-    }
+    // categoriesInfo() {
+    //     const renderItem = ({ item }) => (
+    //         <View style={{ alignItems: 'center', marginRight: Sizes.fixPadding * 2.0, }}>
+    //             <View style={styles.categoryImageWrapStyle}>
+    //                 <Image
+    //                     source={item.image}
+    //                     style={{ width: 40.0, height: 40.0, }}
+    //                     resizeMode="contain"
+    //                 />
+    //             </View>
+    //             <Text style={{ marginTop: Sizes.fixPadding, ...Fonts.blackColor15Medium }}>
+    //                 {item.type}
+    //             </Text>
+    //         </View>
+    //     )
+    //     return (
+    //         <View>
+    //             <Text style={{ ...Fonts.blackColor19Medium, marginHorizontal: Sizes.fixPadding, }}>
+    //                 Categories
+    //             </Text>
+    //             <FlatList
+    //                 horizontal
+    //                 data={categoriesList}
+    //                 keyExtractor={(item) => `${item.id}`}
+    //                 renderItem={renderItem}
+    //                 showsHorizontalScrollIndicator={false}
+    //                 contentContainerStyle={{
+    //                     paddingLeft: Sizes.fixPadding + 5.0,
+    //                     paddingBottom: Sizes.fixPadding * 3.0,
+    //                     paddingTop: Sizes.fixPadding,
+    //                 }}
+    //             />
+    //         </View>
+    //     )
+    // }
 
     offerBanners() {
         const renderItem = ({ item }) => (

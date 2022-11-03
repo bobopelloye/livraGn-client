@@ -5,103 +5,15 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheet } from "react-native-elements";
 import { withNavigation } from "react-navigation";
 
-const juiceList = [
-    {
-        id: '1',
-        image: require('../../assets/images/products/lemon_juice.png'),
-        name: 'Lemon Juice Fresh',
-        amount: 5.2,
-        isFavourite: false,
-    },
-    {
-        id: '2',
-        image: require('../../assets/images/products/orange_juice.png'),
-        name: 'Lemon Juice Fresh',
-        amount: 4.5,
-        isFavourite: false,
-    }
-];
+const juiceList = [];
 
 const coffeeList = [
-    {
-        id: '1',
-        image: require('../../assets/images/products/lemon_juice.png'),
-        name: 'Lemon Juice Fresh',
-        amount: 5.2,
-        isFavourite: false,
-    },
-    {
-        id: '2',
-        image: require('../../assets/images/products/orange_juice.png'),
-        name: 'Lemon Juice Fresh',
-        amount: 4.5,
-        isFavourite: false,
-    }
+   
 ];
 
-const popularItemsList = [
-    {
-        id: '1',
-        image: require("../../assets/images/products/products_6.png"),
-        foodName: 'Margherita Pizza',
-        foodCategory: 'Delicious Pizza',
-        amount: 5.0,
-        isFavourite: false,
-    },
-    {
-        id: '2',
-        image: require("../../assets/images/products/products_4.png"),
-        foodName: 'Thin Crust Pizza',
-        foodCategory: 'Delicious Pizza',
-        amount: 12.0,
-        isFavourite: false,
-    },
-    {
-        id: '3',
-        image: require("../../assets/images/products/products_5.png"),
-        foodName: 'Veg Burger',
-        foodCategory: 'Fast Food',
-        amount: 4.0,
-        isFavourite: false,
-    },
-    {
-        id: '4',
-        image: require("../../assets/images/products/products_6.png"),
-        foodName: 'Fried Noodles',
-        foodCategory: 'Chinese',
-        amount: 11.0,
-        isFavourite: false,
-    },
-    {
-        id: '5',
-        image: require("../../assets/images/products/products_1.png"),
-        foodName: 'Hakka Noodles',
-        foodCategory: 'Chinese',
-        amount: 7.0,
-        isFavourite: false,
-    },
-    {
-        id: '6',
-        image: require("../../assets/images/products/products_2.png"),
-        foodName: 'Dry Manchuriyan',
-        foodCategory: 'Chinese',
-        amount: 9.9,
-        isFavourite: false,
-    }
-];
+const popularItemsList = [];
 
-const optionsList = [
-    {
-        id: '1',
-        option: 'Add Lemon',
-        isSelected: false,
-    },
-    {
-        id: '2',
-        option: 'Add Ice',
-        isSelected: false,
-    },
-];
+const optionsList = [];
 
 const Products = ({ props, navigation }) => {
 

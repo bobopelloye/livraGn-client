@@ -5,7 +5,7 @@ import { Colors, Fonts, Sizes } from "../../constants/styles";
 const ongoingOrdersList = [
     {
         id: '1',
-        image: require('../../assets/images/restaurant/restaurant_5.png'),
+        image: '',
         name: 'Kichi Coffee & Drink',
         orderId: '43e4215',
         itemCount: 4,
@@ -13,7 +13,7 @@ const ongoingOrdersList = [
     },
     {
         id: '2',
-        image: require('../../assets/images/restaurant/restaurant_2.png'),
+        image: '',
         name: 'Bar 61 Restaurant',
         orderId: '24r4568',
         itemCount: 1,
@@ -21,7 +21,7 @@ const ongoingOrdersList = [
     },
     {
         id: '3',
-        image: require('../../assets/images/restaurant/restaurant_1.png'),
+        image: '',
         name: 'The Barbary',
         orderId: '86e5681',
         itemCount: 2,

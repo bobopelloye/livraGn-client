@@ -15,12 +15,12 @@ const { width } = Dimensions.get('screen');
 const paymentMethods = [
     {
         id: '1',
-        image: require('../../assets/images/payment/visa.png'),
+        image: '',
         number: '**** **** **** *316',
     },
     {
         id: '2',
-        image: require('../../assets/images/payment/master_card.png'),
+        image: '',
         number: '**** **** **** *316',
     }
 ];
