@@ -57,7 +57,7 @@ class RegisterScreen extends Component {
                             this.props.navigation.push('Signin');
                         })
                     .catch(error => {
-                        console.log('error', error.response)
+                        console.log('error upddd', error.response)
                         this.setState({visible: false})
                     })
         }

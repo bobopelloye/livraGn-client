@@ -14,7 +14,7 @@ const { width } = Dimensions.get('screen');
 const restaurantsList = [
     {
         id: '1',
-        image: require('../../assets/images/restaurant/restaurant_5.png'),
+        image: '',
         name: 'Bar 61 Restaurant',
         address: '76A England',
         rating: 4.5,
@@ -23,7 +23,7 @@ const restaurantsList = [
     },
     {
         id: '2',
-        image: require('../../assets/images/restaurant/restaurant_4.png'),
+        image: '',
         name: 'Core by Clare Smyth',
         address: '220 Opera Street',
         rating: 4.2,
@@ -32,7 +32,7 @@ const restaurantsList = [
     },
     {
         id: '3',
-        image: require('../../assets/images/restaurant/restaurant_3.png'),
+        image: '',
         name: 'Amrutha Lounge',
         address: '90B Silicon Velley',
         rating: 5.0,
@@ -41,7 +41,7 @@ const restaurantsList = [
     },
     {
         id: '4',
-        image: require('../../assets/images/restaurant/restaurant_2.png'),
+        image: '',
         name: 'The Barbary',
         address: '99C OBC Area',
         rating: 4.7,
@@ -50,7 +50,7 @@ const restaurantsList = [
     },
     {
         id: '5',
-        image: require('../../assets/images/restaurant/restaurant_1.png'),
+        image: '',
         name: 'The Palomar',
         address: '31A Om Colony',
         rating: 4.1,

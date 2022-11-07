@@ -42,7 +42,8 @@ const EditProfile = ({ navigation }) => {
 
      React.useEffect(() => {
         getUser();
-    }, [currentUser]);
+        console.log('user current', navigation.getParam('userCurrent'))
+    }, []);
 
     const [currentUser, setCurrentUser] = useState({});
     const [fullNameDialog, setFullnameDialog] = useState(false);
@@ -110,7 +111,7 @@ const EditProfile = ({ navigation }) => {
         return (
             <View style={styles.profilePhotoWrapStyle}>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <Image source={require('../../assets/images/login-icon.png')}
+                    <Image source={{ uri: navigation.getParam('userCurrent').avatar }}
                         style={styles.profilePhotoStyle}
                         resizeMode="cover"
                     />
@@ -123,6 +124,35 @@ const EditProfile = ({ navigation }) => {
                 </View>
             </View>
         )
+    }
+
+    const  updateProfil = async (name, value) => {
+        const t = await AsyncStorage.getItem('token')
+        const nameValue = {}
+        nameValue[name] = value;
+        nameValue['password'] = navigation.getParam('userCurrent').password;
+        nameValue['email'] = navigation.getParam('userCurrent').email;
+        console.log('value', nameValue)
+        axios.put(`https://livragn.com/users/${navigation.getParam('userCurrent').id}`,
+         {
+            "full_name":nameValue[name],
+            "password":nameValue['password'],
+            "email":nameValue['email'],
+         },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": t
+            },      
+        })      
+        .then((response) => {
+          console.log('current user',response.data)
+          setCurrentUser(response.data)
+          setFullnameDialog(false)
+        })
+        .catch((error) => {
+          console.log('error',error.response)
+        })
     }
 
     function formData({ title, value }) {
@@ -168,9 +198,9 @@ const EditProfile = ({ navigation }) => {
                         >
                             <Text style={{ ...Fonts.blackColor16Medium }}>annuler</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.9} onPress={() => {
-                            setFullnameDialog(false)
-                            setFullName(changeText)
+                        <TouchableOpacity activeOpacity={0.9} 
+                        onPress={() => {
+                            updateProfil('full_name', changeText)
                         }
                         }
                             style={styles.okButtonStyle}
@@ -366,7 +396,7 @@ const EditProfile = ({ navigation }) => {
                         setChangeText(fullName);
                     }}
                 >
-                    {formData({ title: 'Nom complet', value: fullName })}
+                    {formData({ title: 'Nom complet', value: navigation.getParam('userCurrent').full_name })}
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.9}
@@ -384,7 +414,7 @@ const EditProfile = ({ navigation }) => {
                         setPhoneDialog(true);
                     }}
                 >
-                    {formData({ title: 'Telephone', value: phone })}
+                    {formData({ title: 'Telephone', value: navigation.getParam('userCurrent').phone })}
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.9}
@@ -393,7 +423,7 @@ const EditProfile = ({ navigation }) => {
                         setEmailDialog(true)
                     }}
                 >
-                    {formData({ title: 'Email', value: email })}
+                    {formData({ title: 'Email', value: navigation.getParam('userCurrent').email })}
                 </TouchableOpacity>
                 {editFullNameDialog()}
                 {editPasswordDialog()}

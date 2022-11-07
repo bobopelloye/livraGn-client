@@ -15,12 +15,12 @@ const { width } = Dimensions.get('screen');
 const paymentMethods = [
     {
         id: '1',
-        image: require('../../assets/images/payment/visa.png'),
+        image: '',
         number: '**** **** **** *316',
     },
     {
         id: '2',
-        image: require('../../assets/images/payment/master_card.png'),
+        image: '',
         number: '**** **** **** *316',
     }
 ];
@@ -168,7 +168,8 @@ class ConfirmOrderScreen extends Component {
         quantity: [],
         total: 0,
         address: '',
-        visible: false
+        visible: false,
+        addressIsValide: false
     }
     
     render() {
@@ -275,6 +276,7 @@ class ConfirmOrderScreen extends Component {
         }
         else {
             this.setState({visible: false})
+            this.setState({addressIsValide: true})
             console.log('error: addresse doit etre fourni')
         }
        
@@ -347,6 +349,7 @@ class ConfirmOrderScreen extends Component {
                     marginTop: Sizes.fixPadding - 5.0,
                 }}>
                 </View>
+                { this.state.addressIsValide ?<Text style={{ marginLeft: 15, color: 'red'}}>L'adresse est obligatoire</Text>: <Text></Text>}
                 <TextInput
                     placeholder="Adresse de livraison *"
                     textAlignVertical = "top"
@@ -359,6 +362,7 @@ class ConfirmOrderScreen extends Component {
                     placeholderTextColor={Colors.grayColor}
                     selectionColor={Colors.primaryColor}    
                 />
+               
             </View>
         )
     }
@@ -423,7 +427,23 @@ class ConfirmOrderScreen extends Component {
                         <Text style={{ ...Fonts.grayColor14Medium }}>
                             {plat.restaurant}
                         </Text>
+
+                       
                     </View>
+
+                    <Text style={{ ...Fonts.grayColor14Medium }}>
+                    {/* <TouchableOpacity
+                            activeOpacity={0.9}
+                            onPress={() =>  this.DeleteToPanier()}
+                            style={styles.addIconWrapStyle}
+                        >
+                            <MaterialIcons
+                                name="delete"
+                                size={17}
+                                color={Colors.whiteColor}
+                            />
+                        </TouchableOpacity> */}
+                    </Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ ...Fonts.blackColor16Medium }}>
@@ -440,6 +460,7 @@ class ConfirmOrderScreen extends Component {
                     <Text style={{ ...Fonts.blackColor16Medium }}>
                          0 FG
                     </Text>
+                    
                 </View>
                 <View style={{ marginVertical: Sizes.fixPadding + 2.0, backgroundColor: Colors.grayColor, height: 0.50, }} />
                
@@ -647,7 +668,16 @@ const styles = StyleSheet.create({
         marginHorizontal: Sizes.fixPadding,
         flexDirection: 'row',
         justifyContent: 'space-between'
-    }
+    },
+    addIconWrapStyle: {
+        width: 20.0,
+        height: 20.0,
+        borderRadius: 11.0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Colors.primaryColor,
+    },
+
 })
 
 ConfirmOrderScreen.navigationOptions = () => {

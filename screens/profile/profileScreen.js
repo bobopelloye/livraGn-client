@@ -65,7 +65,7 @@ class ProfileScreen extends Component {
                             backgroundColor: Colors.bodyBackColor
                         }}
                     >
-                        {this.paymentAddressAndVoucherSetting()}
+                        {/* {this.paymentAddressAndVoucherSetting()} */}
                         {this.settingsInfo()}
                         {this.logOutInfo()}
                     </ScrollView>
@@ -165,10 +165,10 @@ class ProfileScreen extends Component {
                     activeOpacity={0.9}
                     onPress={() => this.props.navigation.push('Notifications')}
                 >
-                    {this.settings({
+                    {/* {this.settings({
                         icon: <MaterialIcons name="notifications" size={24} color={Colors.grayColor} />,
                         setting: 'Notifications'
-                    })}
+                    })} */}
                 </TouchableOpacity>
                 {this.settings({
                     icon: <MaterialIcons name="language" size={24} color={Colors.grayColor} />,
@@ -212,11 +212,11 @@ class ProfileScreen extends Component {
         return (
             <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => this.props.navigation.push('EditProfile')}
+                onPress={() => this.props.navigation.push('EditProfile', { userCurrent : this.state.currentUser})}
                 style={styles.userInfoWrapStyle}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
-                        source={require('../../assets/images/login-icon.png')}
+                        source={{uri:`${this.state.currentUser? this.state.currentUser.avatar:""}`}}
                         style={{
                             width: 70.0, height: 70.0,
                             borderRadius: Sizes.fixPadding - 5.0,

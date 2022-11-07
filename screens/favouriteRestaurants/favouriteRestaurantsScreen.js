@@ -10,7 +10,7 @@ const { width } = Dimensions.get('screen');
 const restaurantsList = [
     {
         key: '1',
-        image: require('../../assets/images/restaurant/restaurant_5.png'),
+        image: '',
         name: 'Bar 61 Restaurant',
         address: '76A England',
         rating: 4.5,
@@ -19,7 +19,7 @@ const restaurantsList = [
     },
     {
         key: '2',
-        image: require('../../assets/images/restaurant/restaurant_4.png'),
+        image: '',
         name: 'Core by Clare Smyth',
         address: '220 Opera Street',
         rating: 4.2,
@@ -28,7 +28,7 @@ const restaurantsList = [
     },
     {
         key: '3',
-        image: require('../../assets/images/restaurant/restaurant_3.png'),
+        image: '',
         name: 'Amrutha Lounge',
         address: '90B Silicon Velley',
         rating: 5.0,
